@@ -1,8 +1,6 @@
 /**
  * Sample of how to use rc-input-validator package
  * https://github.com/atmulyana/rc-input-validator
- *
- * @format
  */
 import React from 'react';
 import {

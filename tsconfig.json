@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "commonjs",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "outDir": "./dist",
+    "rootDir": "./",
+    "declaration": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "preserve",
+    "isolatedModules": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "allowArbitraryExtensions": true,
+    "resolveJsonModule": true,
+    "resolvePackageJsonImports": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    // Causes issues with package.json "exports"
+    "forceConsistentCasingInFileNames": false
+  },
+  "exclude": [
+    "__tests__",
+    "dist",
+    "example",
+    "node_modules",
+    "babel.config.js",
+  ]
+}

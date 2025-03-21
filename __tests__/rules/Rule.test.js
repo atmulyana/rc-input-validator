@@ -1,7 +1,5 @@
 /**
  * https://github.com/atmulyana/rc-input-validator
- *
- * @format
  */
 import ValidationRule from '../../rules/ValidationRule';
 

@@ -3,12 +3,15 @@
  * @format
  */
 import {
-    ValidationContext as mock_ValidationContext,
     setRef as mock_setRef,
     str as mock_str,
 } from '../../../../';
 import {
+    red as mock_red,
+} from '../../../../Context';
+import {
     Validation as mock_Validation,
+    ValidationContext as mock_ValidationContext,
     isDifferentStyle as mock_isDifferentStyle,
     setStatusStyleDefault as mock_setStatusStyleDefault,
     withValidation as mock_withValidation,
@@ -37,9 +40,16 @@ import mock_ValidationRule, {
 jest.mock('rc-input-validator', 
     () => ({
         __esModule: true,
-        ValidationContext: mock_ValidationContext,
         setRef: mock_setRef,
         str: mock_str,
+    }),
+    {virtual: true}
+);
+
+jest.mock('rc-input-validator/Context', 
+    () => ({
+        __esModule: true,
+        red: mock_red,
     }),
     {virtual: true}
 );
@@ -48,6 +58,7 @@ jest.mock('rc-input-validator/native',
     () => ({
         __esModule: true,
         Validation: mock_Validation,
+        ValidationContext: mock_ValidationContext,
         isDifferentStyle: mock_isDifferentStyle,
         setStatusStyleDefault: mock_setStatusStyleDefault,
         withValidation: mock_withValidation,

@@ -1,7 +1,5 @@
 /**
  * https://github.com/atmulyana/rc-input-validator
- *
- * @format
  */
 import {strlen, strlenmax} from '../../rules/strlen';
 

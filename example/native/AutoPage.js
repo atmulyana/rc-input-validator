@@ -1,8 +1,6 @@
 /**
  * Sample of how to use rc-input-validator package
  * https://github.com/atmulyana/rc-input-validator
- *
- * @format
  */
 import * as React from 'react';
 import {
@@ -12,8 +10,10 @@ import {
     View,
 } from 'react-native';
 import styles from './styles';
-import {ValidationContext} from "rc-input-validator";
-import {withValidation} from "rc-input-validator/native";
+import {
+    ValidationContext,
+    withValidation
+} from "rc-input-validator/native";
 import {
     email,
     required,

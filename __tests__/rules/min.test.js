@@ -1,7 +1,5 @@
 /**
  * https://github.com/atmulyana/rc-input-validator
- *
- * @format
  */
 import {min} from '../../rules/min';
 

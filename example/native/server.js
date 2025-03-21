@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * Sample of how to use rc-input-validator package
+ * https://github.com/atmulyana/rc-input-validator
+ */
 const {
     validate
 } = require("../../dist/helpers");

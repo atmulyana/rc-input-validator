@@ -1,7 +1,5 @@
 /**
  * https://github.com/atmulyana/rc-input-validator
- *
- * @format
  */
 import {min, numeric, required, ValidationRule, ValidationRuleAsync} from '../../rules';
 import {validate, validateAsync} from '../../helpers';
