@@ -1,5 +1,5 @@
 /**
- * Sample of how to use rc-input-validator package
+ * Example of how to use rc-input-validator package
  * https://github.com/atmulyana/rc-input-validator
  */
 import * as React from 'react';
@@ -39,12 +39,13 @@ export default function() {
     const [value2, setValue2] = React.useState('');
 
     return <ValidationContext ref={validation}>
-        <Text style={[styles.text, {fontSize: 16, fontWeight: 'bold', lineHeight: 20, marginBottom: 10, textAlign: 'center'}]}>The Benefit of setMessageFunc</Text>
-        <Text style={[styles.text, {marginBottom: 10}]}>To validate an input, often, we need some rules. However, each rule comes with its own
+        <Text style={styles.title}>The Benefit of setMessageFunc</Text>
+        <Text style={styles.description}>To validate an input, often, we need some rules. However, each rule comes with its own
         error message which is specific to each rule. It can cause the prolix messages.{'\n'}
         The first input gives the prolix messages: when you don't fill anything, it asks to be filled. When you enter a non-numeric value, it asks a numeric
         value. When you enter a fractional number, it asks a round number. When you enter a round number below 5, it asks 5 at minimum.{'\n'}
-        The second input uses setMessageFunc to make a more straightforward message that it wants a round number with minimum value of 5.
+        The second input uses `setMessageFunc` to make a more straightforward message that it wants a round number with minimum value of 5.
+        `setMessageFunc` may be replaced by `setErrorMessage` if the message is simple without needing any parameter.
         </Text>
 
         <View style={styles.inputRow}>

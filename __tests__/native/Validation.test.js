@@ -1,7 +1,7 @@
 /**
  * https://github.com/atmulyana/rc-input-validator
  */
-import Renderer from 'react-test-renderer';
+import {act, cleanup, render, screen} from '@testing-library/react-native';
 import {StyleSheet, Text, View} from "react-native";
 import {Validation} from "../../native/Validation";
 import {rule} from '../../rules';
@@ -15,47 +15,44 @@ const Form = ({value}) =>
             value={value} />
     </View>;
 
+afterEach(cleanup);
+
 test('render Value with actual value', () => {
-    let renderer;
-    Renderer.act(() => {
-        renderer = Renderer.create(<Form value={false} />);
-    });
+    render(<Form value={false} />);
+    
+    //expect(screen.toJSON()).toMatchSnapshot();
 
-    //expect(renderer.toJSON()).toMatchSnapshot();
-
-    const form = renderer.root;
+    const form = screen.root;
     const input = form.findByType(Validation);
     expect(input.props.value).toEqual(false);
     expect(() => input.findByType(Text)).toThrow(); //no error message
     
-    Renderer.act(() => {
+    act(() => {
         valRef.validate();
     });
     expect(() => input.findByType(Text)).not.toThrow(); //an error message exists
 });
 
 test('render Value with value as function', () => {
-    let renderer, value = true;
-    Renderer.act(() => {
-        renderer = Renderer.create(<Form value={() => value} />);
-    });
+    let value = true;
+    render(<Form value={() => value} />);
+    
+    //expect(screen.toJSON()).toMatchSnapshot();
 
-    //expect(renderer.toJSON()).toMatchSnapshot();
-
-    const form = renderer.root;
+    const form = screen.root;
     const input = form.findByType(Validation);
     expect(typeof(input.props.value)).toEqual('function');
     expect(() => input.findByType(Text)).toThrow(); //no error message
     
     expect(input.props.value()).toEqual(true);
-    Renderer.act(() => {
+    act(() => {
         valRef.validate();
     });
     expect(() => input.findByType(Text)).toThrow(); //no error message
 
     value = false;
     expect(input.props.value()).toEqual(false);
-    Renderer.act(() => {
+    act(() => {
         valRef.validate();
     });
     expect(() => input.findByType(Text)).not.toThrow(); //an error message exists

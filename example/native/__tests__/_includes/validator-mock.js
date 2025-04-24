@@ -1,6 +1,5 @@
 /**
  * https://github.com/atmulyana/rc-input-validator
- * @format
  */
 import {
     setRef as mock_setRef,
@@ -13,7 +12,6 @@ import {
     Validation as mock_Validation,
     ValidationContext as mock_ValidationContext,
     isDifferentStyle as mock_isDifferentStyle,
-    setStatusStyleDefault as mock_setStatusStyleDefault,
     withValidation as mock_withValidation,
 } from '../../../../native';
 import mock_ValidationRule, {
@@ -33,8 +31,8 @@ import mock_ValidationRule, {
     regex as mock_regex,
     Required as mock_Required,
     required as mock_required,
-    StrLength as mock_StrLength,
-    strlen as mock_strlen,
+    Length as mock_Length,
+    length as mock_length,
 } from '../../../../rules';
 
 jest.mock('rc-input-validator', 
@@ -60,7 +58,6 @@ jest.mock('rc-input-validator/native',
         Validation: mock_Validation,
         ValidationContext: mock_ValidationContext,
         isDifferentStyle: mock_isDifferentStyle,
-        setStatusStyleDefault: mock_setStatusStyleDefault,
         withValidation: mock_withValidation,
     }),
     {virtual: true}
@@ -86,8 +83,8 @@ jest.mock('rc-input-validator/rules',
         regex: mock_regex,
         Required: mock_Required,
         required: mock_required,
-        StrLength: mock_StrLength,
-        strlen: mock_strlen,
+        Length: mock_Length,
+        length: mock_length,
     }),
     {virtual: true}
 );

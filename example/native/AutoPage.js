@@ -1,5 +1,5 @@
 /**
- * Sample of how to use rc-input-validator package
+ * Example of how to use rc-input-validator package
  * https://github.com/atmulyana/rc-input-validator
  */
 import * as React from 'react';
@@ -32,8 +32,8 @@ export default function AutoPage() {
     const [value2, setValue2] = React.useState('');
 
     return <ValidationContext ref={validation} auto={isAuto} focusOnInvalid={true}>
-        <Text style={[styles.text, {fontSize: 16, fontWeight: 'bold', lineHeight: 20, marginBottom: 10, textAlign: 'center'}]}>Auto Validation</Text>
-        <Text style={[styles.text, {marginBottom: 10}]}>Enter the email address to both inputs.</Text>
+        <Text style={styles.title}>Auto Validation</Text>
+        <Text style={styles.description}>Enter the email address to both inputs.</Text>
 
         <View style={styles.inputRow}>
             <Text style={styles.label}>{isAuto ? 'Auto' : 'Not Auto'}</Text>

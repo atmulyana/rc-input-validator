@@ -1,6 +1,6 @@
 {
   "name": "rc-input-validator",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Doing validation to the form inputs in react app (web and native)",
   "author": "AT Mulyana <atmulyana@yahoo.com>",
   "license": "MIT",
@@ -24,19 +24,20 @@
   },
   "files": [
     "dist",
+    "docs/images",
     "helpers",
     "native",
     "rules",
+    "web",
     "Context.tsx",
     "global.d.ts",
     "index.ts",
     "messages.ts",
-    "types.ts"
+    "types.ts",
+    "Validation.tsx"
   ],
-  "dependencies": {
-    "reactjs-common": ">=0.0.3"
-  },
   "peerDependencies": {
+    "jssimpledateformat": "^3.0.3",
     "react": ">=16.8",
     "react-is": "*",
     "react-native": "*"
@@ -44,6 +45,9 @@
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@react-native/metro-config": "^0.78.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/react-native": "^13.2.0",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
@@ -51,18 +55,20 @@
     "@types/react-test-renderer": "^19.0.0",
     "babel-jest": "^29.7.0",
     "jest": "^29.6.4",
-    "react-test-renderer": "19.0.0",
+    "jest-environment-jsdom": "^29.7.0",
     "typescript": "^5.8.2"
   },
   "jest": {
     "preset": "react-native",
     "testMatch": [
-      "**/__tests__/**/*.[jt]s?(x)",
       "**/?(*.)+(spec|test).[jt]s?(x)",
       "!**/example/**"
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!(javascript-common|@react-native|react-native|reactjs-common)/)"
     ]
+  },
+  "dependencies": {
+    "reactjs-common": "^0.0.4"
   }
 }

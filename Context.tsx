@@ -2,7 +2,7 @@
  * https://github.com/atmulyana/rc-input-validator
  */
 import React from 'react';
-import {noop} from 'javascript-common';
+import {noChange, noop} from 'javascript-common';
 import {setRef} from 'reactjs-common';
 import type {ContextDefaultProps, ContextProps, ContextValue, ContextRef, InputRef} from './types';
 import {AsyncFailMessage} from './types';
@@ -14,7 +14,7 @@ export const red = '#dc3545';
 export function contextFactory<StyleProps>(
     defaultValues: Pick<
         ContextDefaultProps<Nullable<StyleProps>>,
-        'errorTextStyle' | 'inputErrorStyle' | 'Container'
+        'errorTextStyle' | 'inputErrorStyle' | 'Container' | 'ErrorText'
     >
 ) {
     type T = Nullable<StyleProps>;
@@ -31,9 +31,11 @@ export function contextFactory<StyleProps>(
             asyncFailMessage: AsyncFailMessage.Default,
             auto: false,
             Container: noop,
+            ErrorText: noop,
             errorTextStyle: null,
             focusOnInvalid: false,
             inputErrorStyle: null,
+            lang: noChange,
             get nextIndex() {
                 return validations.lastIndex++;
             },
@@ -41,7 +43,7 @@ export function contextFactory<StyleProps>(
                 validations.refs.set(ref.index, ref);
                 if (ref.name) {
                     const map = validations.refsByName,
-                        name = ref.name;
+                          name = ref.name;
                     // const _ref = map.get(name);
                     // if (_ref && _ref != ref) throw `There are more than one input named '${name}' in the same context`;
                     map.set(name, ref);
@@ -52,7 +54,7 @@ export function contextFactory<StyleProps>(
                 //Often, the input is unmounted and then re-mounted
                 if (validations.refs.has(ref.index)) validations.refs.set(ref.index, undefined);
                 const map = validations.refsByName,
-                    name = ref.name;
+                      name = ref.name;
                 if (name && map.get(name) === ref) map.delete(name);
             },
         };
@@ -116,6 +118,7 @@ export function contextFactory<StyleProps>(
             asyncFailMessage,
             auto,
             Container,
+            ErrorText,
             contextRef,
             errorTextStyle,
             focusOnInvalid,
@@ -128,11 +131,12 @@ export function contextFactory<StyleProps>(
         ctx.asyncFailMessage = asyncFailMessage;
         ctx.auto = auto;
         ctx.Container = Container;
+        ctx.ErrorText = ErrorText;
         ctx.errorTextStyle = errorTextStyle;
         ctx.focusOnInvalid = focusOnInvalid;
         ctx.inputErrorStyle = inputErrorStyle;
         ctx.lang = lang;
-        contextRef && setRef(contextRef, ref);
+        setRef(contextRef, ref);
         
         return <Context.Provider value={ctx}>
             {children}
@@ -151,9 +155,11 @@ export function contextFactory<StyleProps>(
         asyncFailMessage: AsyncFailMessage.Default,
         auto: false,
         Container: defaultProps.Container,
+        ErrorText: defaultProps.ErrorText,
         errorTextStyle: Object.freeze(defaultProps.errorTextStyle),
         focusOnInvalid: false,
         inputErrorStyle: Object.freeze(defaultProps.inputErrorStyle),
+        lang: noChange,
         nextIndex: -1,
         addRef: noop,
         removeRef: noop,

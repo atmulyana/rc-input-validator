@@ -17,6 +17,7 @@ export class Required extends ValidationRule<unknown> {
     }
 
     #if: Nullable<((p: unknown) => boolean)>;
+    #trimmed = true;
 
     get priority() {return -Number.MAX_VALUE}
 
@@ -24,10 +25,15 @@ export class Required extends ValidationRule<unknown> {
         return this.lang(messages.required);
     }
 
-    // get resultValue() {
-    //     return typeof(this.value) == 'string' ? this.value.trim() : this.value;
-    // }
+    get resultValue() {
+        return typeof(this.value) == 'string' && this.#trimmed ? this.value.trim() : this.value;
+    }
 
+    notTrimmed() {
+        this.#trimmed = false;
+        return this;
+    }
+    
     validate(): Rule<unknown> {
         if (typeof this.#if == 'function') {
             if (this.#if(this.value)) this.isValid = isFilled(this.value);
@@ -46,7 +52,7 @@ class RequiredIf extends Required {
 
 export const required: RequiredIf = new RequiredIf();
 required.setMessageFunc = function() {
-    throw new Error("`required` rule object is shared among inputs. If you want to set message function, use `new Required()` instead.");
+    throw new Error("`required` rule object is shared among inputs. If you want to set message, use `new Required()` instead.");
 }
 
 const isFalse = () => false;

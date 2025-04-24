@@ -3,7 +3,7 @@
  */
 import {integer, Integer} from '../../rules/integer';
 
-test('validation: email', () => {
+test('validation: integer', () => {
     expect(integer.setValue(123).validate().isValid).toBe(true);
     expect(integer.setValue(-123).validate().isValid).toBe(true);
     expect(integer.setValue(0).validate().isValid).toBe(true);

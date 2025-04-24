@@ -6,15 +6,15 @@ import type {Rule, ValidateFunctionAsync} from '../types';
 import messages from '../messages';
 import ValidationRuleAsync from './ValidationRuleAsync';
 
-export class CustomRuleAsync extends ValidationRuleAsync<unknown> {
-    constructor(validateFunc: ValidateFunctionAsync<unknown>, errorMessage?: string) {
+export class CustomRuleAsync<V = unknown> extends ValidationRuleAsync<V> {
+    constructor(validateFunc: ValidateFunctionAsync<V>, errorMessage?: string) {
         super();
         this.#validate = validateFunc;
         this.#errorMessage = typeof(errorMessage) == 'string' ? errorMessage : null;
         this.setPriority(1001);
     }
 
-    #validate: ValidateFunctionAsync<unknown>;
+    #validate: ValidateFunctionAsync<V>;
     #errorMessage: Nullable<string>;
     #message: Nullable<string>;
 
@@ -22,7 +22,7 @@ export class CustomRuleAsync extends ValidationRuleAsync<unknown> {
         return this.#message;
     }
 
-    async validate(): Promise<Rule<unknown>> {
+    async validate(): Promise<Rule<V>> {
         const validationValue = await new Promise(resolve => {
             this.#validate(this.value, resolve);
         });
@@ -41,4 +41,5 @@ export class CustomRuleAsync extends ValidationRuleAsync<unknown> {
         return this;
     }
 }
-export const ruleAsync = (validateFunc: ValidateFunctionAsync<unknown>, errorMessage?: string): CustomRuleAsync => new CustomRuleAsync(validateFunc, errorMessage);
+export const ruleAsync = <V = unknown>(validateFunc: ValidateFunctionAsync<V>, errorMessage?: string): Rule<V> =>
+    new CustomRuleAsync(validateFunc, errorMessage);

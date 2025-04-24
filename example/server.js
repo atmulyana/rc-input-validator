@@ -1,29 +1,47 @@
 'use strict';
 /**
- * Sample of how to use rc-input-validator package
+ * Example of how to use rc-input-validator package
  * https://github.com/atmulyana/rc-input-validator
  */
 const {
     validate
-} = require("../../dist/helpers");
+} = require("../dist/helpers");
 const {
     required,
     rule,
-    strlen,
-} = require('../../dist/rules');
+    length,
+} = require('../dist/rules');
 
 const http = require("http");
 const host = '0.0.0.0';
 const port = 1234;
 
 const server = http.createServer(function(req, resp) {
+    function headers(contenType) {
+        return  {
+            'Access-Control-Allow-Origin': '*', 
+            'Content-Type': contenType
+        };
+    }
+
     function Ok() {
-        resp.writeHead(200, { 'Content-Type': 'text/plain' });
+        resp.writeHead(200, headers('text/plain'));
         resp.end('Ok');
     }
 
     if (req.method == 'GET') {
         Ok();
+        return;
+    }
+
+    if (req.method == 'OPTIONS') {
+        resp.writeHead(204, {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': 86400,
+        });
+        resp.end('');
         return;
     }
 
@@ -33,11 +51,19 @@ const server = http.createServer(function(req, resp) {
     });
     req.on('end', () => {
         if (req.url == '/check-password') {
-            data = JSON.parse(data);
-            const errors = validatePassword.bind(data)();
-            if (Object.keys(errors).length > 0) {
-                resp.writeHead(400, { 'Content-Type': 'application/json' });
-                resp.end(JSON.stringify(errors));
+            try {
+                data = JSON.parse(data);
+                const errors = validatePassword.bind(data)();
+                if (Object.keys(errors).length > 0) {
+                    resp.writeHead(400, headers('application/json'));
+                    resp.end(JSON.stringify(errors));
+                    return;
+                }
+            }
+            catch (err) {
+                console.log('error: ', err);
+                resp.writeHead(400, headers('text/plain'));
+                resp.end('An error happened!!!');
                 return;
             }
         }
@@ -65,7 +91,7 @@ function validatePassword() {
     const rules = {
         password: [
             required,
-            strlen(8),
+            length(8),
             rule(
                 value => {
                     return /[a-z]/.test(value) && /[A-Z]/.test(value) && /[0-9]/.test(value) && /[^a-zA-Z\d\s]/.test(value);

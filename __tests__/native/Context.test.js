@@ -1,7 +1,7 @@
 /**
  * https://github.com/atmulyana/rc-input-validator
  */
-import Renderer from 'react-test-renderer';
+import {act, cleanup, render} from '@testing-library/react-native';
 import {TextInput, View} from "react-native";
 import {ValidationContext, withValidation} from '../../native';
 import {required} from '../../rules';
@@ -16,12 +16,11 @@ const Form = () =>
         <Input2 ref={ref => inputRef2 = ref} />
     </ValidationContext>;
 
-test('ValidationContext', () => {
-    let renderer;
-    Renderer.act(() => {
-        renderer = Renderer.create(<Form />);
-    });
+afterEach(cleanup);
 
+test('ValidationContext', () => {
+    render(<Form />);
+    
     expect(contextRef).not.toBeFalsy();
     expect(typeof contextRef.clearValidation).toBe('function');
     expect(typeof contextRef.refreshMessage).toBe('function');
@@ -53,7 +52,7 @@ test('ValidationContext', () => {
     expect(Object.is(contextRef.getInput('input2'), inputRef2)).toBe(true);
     expect(contextRef.getInput('noInput')).toBeUndefined();
 
-    Renderer.act(() => {
+    act(() => {
         expect(contextRef.validate()).toBe(false);
     });
     expect(contextRef.isValid).toBe(false);
@@ -63,7 +62,7 @@ test('ValidationContext', () => {
     expect(contextRef.getErrorMessage('input2')).toBe('required');
     expect(contextRef.getErrorMessage('noInput')).toBeUndefined();
 
-    Renderer.act(() => {
+    act(() => {
         contextRef.clearValidation();
     });
     expect(contextRef.isValid).toBe(true);
@@ -75,10 +74,7 @@ test('ValidationContext', () => {
 });
 
 test('ValidationContext: get/setErrorMessage', () => {
-    let renderer;
-    Renderer.act(() => {
-        renderer = Renderer.create(<Form />);
-    });
+    render(<Form />);
     
     expect(contextRef.isValid).toBe(true);
     expect(contextRef.getErrorMessage('input2')).toBe('');
@@ -88,7 +84,7 @@ test('ValidationContext: get/setErrorMessage', () => {
     expect(inputRef1.getErrorMessage()).toBe('');
     expect(inputRef2.getErrorMessage()).toBe('');
 
-    Renderer.act(() => {
+    act(() => {
         contextRef.setErrorMessage('input2', 'an error');
     });
     expect(contextRef.isValid).toBe(false);

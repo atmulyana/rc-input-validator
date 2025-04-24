@@ -1,5 +1,5 @@
 /**
- * Sample of how to use rc-input-validator package
+ * Example of how to use rc-input-validator package
  * https://github.com/atmulyana/rc-input-validator
  */
 import React from 'react';

@@ -1,5 +1,5 @@
 /**
- * Sample of how to use rc-input-validator package
+ * Example of how to use rc-input-validator package
  * https://github.com/atmulyana/rc-input-validator
  */
 import {StyleSheet} from 'react-native';
@@ -58,6 +58,7 @@ const styles = Object.assign({}, StyleSheet.create({
     },
 }));
 export default Object.assign(styles, {
+    description: [styles.text, {marginBottom: 10}],
     label: [styles.text, styles.textPaddingVert, styles.flex1],
     name: [styles.horizontal, styles.flex3],
     namePartTitle: [styles.text, styles.textSmall],
@@ -66,4 +67,11 @@ export default Object.assign(styles, {
     textInput: [styles.text, styles.textSlim, styles.border, styles.textInputHeight, styles.flex3],
     textSlim: [styles.text, styles.textSlim],
     textSmall: [styles.text, styles.textSmall],
+    title: [styles.text, {
+        fontSize: 16,
+        fontWeight: 'bold',
+        lineHeight: 20,
+        marginBottom: 10,
+        textAlign: 'center'
+    }],
 });

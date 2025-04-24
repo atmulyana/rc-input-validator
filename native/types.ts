@@ -10,11 +10,17 @@ import type {
 type Falsy = undefined | null | false | "";
 interface RecursiveArray<T> extends Array<T | Array<T> | RecursiveArray<T>> {}
 interface AnyInterface {}
-export type StyleProp<T = Readonly<{[p: string]: unknown}> | AnyInterface > =
+export type StyleProp< T = (Readonly<{[p: string]: unknown}> | AnyInterface) > =
     | T
     | RecursiveArray<T | Falsy>
     | Falsy;
 
 export type ContextValue = GlobalContextValue<StyleProp>;
-export type ValidationOption<Props, Value = unknown> = GlobalValidationOption<Props, StyleProp, Value>;
+export type ValidationOption<Props, Value = unknown> = GlobalValidationOption<
+    Props,
+    StyleProp,
+    Props,
+    StyleProp,
+    Value
+>;
 export type ValidationProps = GlobalValidationProps<StyleProp>;

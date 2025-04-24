@@ -8,10 +8,10 @@ import {isFilled} from './common';
 
 function checkRule(
     value: unknown,
-    rules: Array<Rule> | Rule,
+    rules: Array<Rule<any>> | Rule<any>,
     lang: LangFunction
-): boolean | Array<Rule> {
-    let arRule: Array<Rule>;
+): boolean | Array<Rule<any>> {
+    let arRule: Array<Rule<any>>;
     if (Array.isArray(rules)) {
         arRule = rules;
     }
@@ -26,7 +26,7 @@ function checkRule(
         if (rule instanceof Required) required = rule;
         return rule instanceof Rule; //runtime check
     }).sort(
-        (rule1: Rule, rule2: Rule) => (
+        (rule1: Rule<any>, rule2: Rule<any>) => (
             rule1.priority < rule2.priority ? -1 :
             rule1.priority > rule2.priority ? 1 :
             0
@@ -50,7 +50,7 @@ function checkRule(
 
 export function validate(
     value: unknown,
-    rules: Array<Rule> | Rule,
+    rules: Array<Rule<any>> | Rule<any>,
     name?: string|null,
     lang: LangFunction = Rule.defaultLang
 ): Nullable<boolean | string> {
@@ -81,7 +81,7 @@ export function validate(
 
 export async function validateAsync(
     value: unknown,
-    rules: Array<Rule> | Rule,
+    rules: Array<Rule<any>> | Rule<any>,
     name?: string|null,
     lang: LangFunction = Rule.defaultLang
 ): Promise<Nullable<boolean | string>> {

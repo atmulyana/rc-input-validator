@@ -1,14 +1,13 @@
 /**
  * https://github.com/atmulyana/rc-input-validator
  */
-import Renderer from 'react-test-renderer';
+import {act, cleanup, render, screen} from '@testing-library/react-native';
 import {StyleSheet, Text, TextInput, View} from "react-native";
-import {setStatusStyleDefault, withValidation} from "../../native/Validation";
+import {withValidation} from "../../native/Validation";
 import {required} from '../../rules';
 
 const Input = withValidation(TextInput, {
     rules: [required],
-    setStatusStyle: setStatusStyleDefault,
 });
 
 let inputRef;
@@ -24,15 +23,14 @@ const Form = () =>
             }} />
     </View>;
 
+afterEach(cleanup);
+
 test('render input `withValidation`', () => {
-    let renderer;
-    Renderer.act(() => {
-        renderer = Renderer.create(<Form />);
-    });
+    render(<Form />);
 
-    //expect(renderer.toJSON()).toMatchSnapshot();
+    //expect(screen.toJSON()).toMatchSnapshot();
 
-    const form = renderer.root;
+    const form = screen.root;
     const input = form.findByType(TextInput);
     const inputContainer = input.parent;
     //const inputRef = input.instance;
@@ -55,7 +53,7 @@ test('render input `withValidation`', () => {
     expect(inputRef.name).toBeUndefined();
     expect(inputRef.isValid).toBe(true);
 
-    Renderer.act(() => {
+    act(() => {
         inputRef.validate();
     });
     expect(inputRef.isValid).toBe(false);
@@ -64,7 +62,7 @@ test('render input `withValidation`', () => {
     expect(inputContainer.children[1].props.children).toBe('required');
     expect(StyleSheet.flatten(input.props.style).borderColor).not.toBe('gray'); //red
 
-    Renderer.act(() => {
+    act(() => {
         inputRef.clearValidation();
     });
     expect(inputRef.isValid).toBe(true);

@@ -10,5 +10,5 @@ declare namespace React {
         [p in keyof Props as (p extends keyof DefaultProps ? never : p)]: Props[p];
     }
 
-    type AbstractComponent<Props, Ref> = React.ComponentType<Props & React.RefAttributes<Ref>>;
+    type AbstractComponent<Props, Instance> = React.ComponentType<React.PropsWithoutRef<Props> & React.RefAttributes<Instance>>;
 }

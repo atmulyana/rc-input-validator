@@ -7,7 +7,9 @@ import {str, type FreeObject} from '../helpers/common';
 import messages from '../messages';
 
 export default /*absract*/ class Rule<V = unknown, R = any> implements FreeObject {
-    static defaultLang: LangFunction = noChange;
+    static get defaultLang(): LangFunction {
+        return noChange;
+    }
     
     constructor() {
         let isCallingMessageFunc: boolean = false;
@@ -58,6 +60,11 @@ export default /*absract*/ class Rule<V = unknown, R = any> implements FreeObjec
     }
     get resultValue(): R {
         return (this.#value as any);
+    }
+
+    setErrorMessage(message: string) {
+        message = message.trim();
+        return this.setMessageFunc(message ? (() => message) : null); //will throw `Error` as necessary on rules: `email`, `integer`, `numeric`, `required`
     }
 
     setMessageFunc(func: MessageFunction<V, R>): Rule<V, R> {

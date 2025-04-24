@@ -3,6 +3,7 @@
  */
 export default {
     asyncFail: 'cannot validate',
+    date: 'invalid date and/or time',
     email: 'invalid email address',
     httpReq: {
         disconnected: "Can't connect to server",
@@ -11,10 +12,11 @@ export default {
     },
     integer: 'must be the round number',
     invalid: 'invalid',
+    lengthMax: "Exceeds the maximum length of ${max}",
+    lengthMin: 'the length must be minimum at ${min}',
     max: 'maximum ${max}',
     min: 'minimum ${min}',
     numeric: 'invalid numeric value',
     required: 'required',
-    strlenmax: "don't exceed ${max} characters",
-    strlenmin: 'must be at least ${min} characters',
+    time: 'invalid time'
 };

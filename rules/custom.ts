@@ -6,15 +6,15 @@ import type {Rule, ValidateFunction} from '../types';
 import messages from '../messages';
 import ValidationRule from './ValidationRule';
 
-export class CustomRule extends ValidationRule<unknown> {
-    constructor(validateFunc: ValidateFunction<unknown>, errorMessage?: string) {
+export class CustomRule<V = unknown> extends ValidationRule<V> {
+    constructor(validateFunc: ValidateFunction<V>, errorMessage?: string) {
         super();
         this.#validate = validateFunc;
         this.#errorMessage = typeof(errorMessage) == 'string' ? errorMessage : null;
         this.setPriority(1000);
     }
 
-    #validate: ValidateFunction<unknown>;
+    #validate: ValidateFunction<V>;
     #errorMessage: Nullable<string>;
     #message: Nullable<string>;
 
@@ -22,7 +22,7 @@ export class CustomRule extends ValidationRule<unknown> {
         return this.#message;
     }
 
-    validate(): Rule<unknown> {
+    validate(): Rule<V> {
         const validationValue = this.#validate(this.value); //It may return true if valid or an error message
         this.isValid = validationValue === true;
         
@@ -39,4 +39,5 @@ export class CustomRule extends ValidationRule<unknown> {
         return this;
     }
 }
-export const rule = (validateFunc: ValidateFunction<unknown>, errorMessage?: string): Rule<unknown> => new CustomRule(validateFunc, errorMessage);
+export const rule = <V = unknown>(validateFunc: ValidateFunction<V>, errorMessage?: string): Rule<V> =>
+    new CustomRule(validateFunc, errorMessage);

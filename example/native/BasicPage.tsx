@@ -1,5 +1,5 @@
 /**
- * Sample of how to use rc-input-validator package
+ * Example of how to use rc-input-validator package
  * https://github.com/atmulyana/rc-input-validator
  *
  * @format
@@ -44,7 +44,6 @@ import {
     red,
 } from "rc-input-validator/Context";
 import {
-    setStatusStyleDefault,
     Validation,
     ValidationContext,
     withValidation,
@@ -92,7 +91,7 @@ export default function BasicPage() {
 
     const TransportInput = withValidation(Select, {
         name: 'Transportation',
-        getValue: props => props.selectedValue,
+        getValue: props => (props as any).selectedValue,
         rules: [
             rule(
                 value => {
@@ -105,12 +104,12 @@ export default function BasicPage() {
             ),
             required,
         ],
-        setStatusStyle: setStatusStyleDefault,
     });
     
     return <ValidationContext ref={validation}>
-        <Text style={[styles.text, {fontSize: 16, fontWeight: 'bold', lineHeight: 20, marginBottom: 10, textAlign: 'center'}]}>Emplyee Data Form</Text>
-        <Text style={[styles.text, {marginBottom: 10}]}>It's a weird emplyee data form but, here, we're focusing on how the input validation works.</Text>
+        {/*@ts-ignore*/}
+        <Text style={styles.title}>Employee Data Form</Text>
+        <Text style={styles.description}>It's a weird employee data form but, here, we're focusing on how the input validation works.</Text>
 
         <View style={styles.inputRow}>
             <Text style={[styles.label, {paddingTop: 16}]}>Full Name</Text>
@@ -205,12 +204,10 @@ const RequiredNameInput = withValidation(TextInput, {
         required,
         regex(/^[a-zA-Z]+$/),
     ],
-    setStatusStyle: setStatusStyleDefault,
 });
 
 const MiddleNameInput = withValidation(TextInput, {
     rules: regex(/^[a-zA-Z]+( [a-zA-Z]+)*$/),
-    setStatusStyle: setStatusStyleDefault,
 });
 
 type ChangeTextHandler = (text: string) => void;
@@ -374,7 +371,6 @@ const DateOfBirthInput = withValidation(DatePicker, {
         max(() => addYear(new Date(), -21)).setMessageFunc(() => 'The employee must be at least 21 years old'),
         min(() => addYear(new Date(), -60)).setMessageFunc(() => 'The employee must be retired at 60 years old'),
     ],
-    setStatusStyle: setStatusStyleDefault,
 });
 
 
@@ -476,11 +472,9 @@ const ChildrenInput = withValidation(ChildsInput, {
         min(0),
         max(4).setMessageFunc(() => 'Maximum 4 children who get allowance'),
     ],
-    setStatusStyle: setStatusStyleDefault,
 });
 
 const DomicileInput = withValidation(Select, {
-    getValue: props => props.selectedValue,
+    getValue: props => (props as any).selectedValue,
     rules: required,
-    setStatusStyle: setStatusStyleDefault,
 });

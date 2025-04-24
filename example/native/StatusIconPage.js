@@ -1,17 +1,15 @@
 /**
- * Sample of how to use rc-input-validator package
+ * Example of how to use rc-input-validator package
  * https://github.com/atmulyana/rc-input-validator
  */
 import React from 'react';
 import {
     Button,
-    ProgressViewIOSComponent,
     Text,
     TextInput,
     View,
 } from 'react-native';
 import {
-    setStatusStyleDefault,
     withValidation
 } from "rc-input-validator/native";
 import {
@@ -69,31 +67,32 @@ function ValidationStatus({icon: Icon, message, style}) {
 const Input = withValidation(TextInput, {
     //auto: true,
     rules: [
-        regex(/^0\d{3}-\d{4}-\d{4}$/).setMessageFunc(() => 'Bad phone number'),
+        regex(/^0[1-9]\d{2}-\d{4}-\d{4}$/).setMessageFunc(() => 'Bad phone number'),
         required,
     ],
     setStatusStyle: (props, style, context) => {
         if (style) { //invalid status after validate or re-render when invalid
-            setStatusStyleDefault(props, style);
+            props.style = [context.normalStyle, style];
             {/** Show a status icon. By using absolute positioning, the icon is placed at the right side of input */}
             return <ValidationStatus icon={X} style={iconStyles.error} />;
         }
-        else if (style === undefined) {  //valid status after validate
-            setStatusStyleDefault(props, textStyles.inputSuccess);
+        else if (style === null) {  //valid status after `validate` action
+            props.style = [context.normalStyle, textStyles.inputSuccess];
             context.flag = 1;
             return <ValidationStatus icon={Check} message="Good phone number" style={iconStyles.success} />;
         }
         else { //clear action or re-render when valid
-            setStatusStyleDefault(props);
+            props.style = context.normalStyle;
             
             /** Not like invalid status which is automatically cleared when starts editing, valid status needs manually clearing */
             if (
                 style === false // re-render such as because of editing value
-                && context.flag === 1 //It's set above when valid after validate action
+                && context.flag === 1 //It's set above when valid after `validate` action
             ) {
                 context.clearValidation();
                 context.flag = 0;
             }
+            return null;
         }
     },
 });
@@ -107,11 +106,11 @@ export default function() {
     const valueOnChange2 = React.useCallback(value => setValue2(value), []);
 
     return <>
-        <Text style={[styles.text, {fontSize: 16, fontWeight: 'bold', lineHeight: 20, marginBottom: 10, textAlign: 'center'}]}>Validation Status Icon</Text>
-        <Text style={[styles.text, {marginBottom: 10}]}>We'll see more fancy validation status which uses an icon. The input is validated
+        <Text style={styles.title}>Validation Status Icon</Text>
+        <Text style={styles.description}>We'll see more fancy validation status which uses an icon. The input is validated
         when it's lost of focus (For iOS, if it can't remove focus from TextInput, please change the source code to enable auto option). Try to enter a valid
         and invalid phone number to the input (valid pattern:{' '}
-        <Text style={{fontWeight:'bold'}}>0ddd-dddd-dddd</Text>).</Text>
+        <Text style={{fontWeight:'bold'}}>0[1-9]dd-dddd-dddd</Text>).</Text>
 
         <View style={styles.inputRow}>
             <Text style={styles.label}>Phone Number</Text>

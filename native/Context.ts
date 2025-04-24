@@ -1,7 +1,7 @@
 /**
  * https://github.com/atmulyana/rc-input-validator
  */
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import type {StyleProp} from './types';
 import {contextFactory, red} from '../Context';
 
@@ -21,6 +21,7 @@ const defaultStyle = StyleSheet.create({
 });
 const {Context, ValidationContext} = contextFactory<StyleProp>({
     Container: View,
+    ErrorText: Text,
     ...defaultStyle
 });
 export {Context, ValidationContext};

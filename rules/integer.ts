@@ -23,7 +23,7 @@ export class Integer extends ValidationRule<unknown> {
 
 export const integer: Rule<unknown> = new Integer();
 integer.setMessageFunc = function() {
-    throw new Error("`integer` rule object is shared among inputs. If you want to set message function, use `new Integer()` instead.");
+    throw new Error("`integer` rule object is shared among inputs. If you want to set message, use `new Integer()` instead.");
 };
 integer.setPriority = function() {
     throw new Error("`integer` rule object is shared among inputs. If you want to set priority, use `new Integer()` instead.");

@@ -1,5 +1,5 @@
 /**
- * Sample of how to use rc-input-validator package
+ * Example of how to use rc-input-validator package
  * https://github.com/atmulyana/rc-input-validator
  */
 import React from 'react';
@@ -18,7 +18,7 @@ import {
     //Required,
     required,
     rule,
-    strlen,
+    length,
 } from 'rc-input-validator/rules';
 import styles from './styles';
 
@@ -37,7 +37,7 @@ export default class extends React.Component {
             name: 'password',
             rules: [
                 required,
-                strlen(8),
+                length(8),
                 rule(
                     value => {
                         return /[a-z]/.test(value) && /[A-Z]/.test(value) && /[0-9]/.test(value) && /[^a-zA-Z\d\s]/.test(value);
@@ -65,8 +65,8 @@ export default class extends React.Component {
         const validNotif = () => Alert.alert('Validation', 'All inputs are valid');
         
         return <ValidationContext ref={this.validationRef}>
-            <Text style={[styles.text, {fontSize: 16, fontWeight: 'bold', lineHeight: 20, marginBottom: 10, textAlign: 'center'}]}>`Compare` Rule</Text>
-            <Text style={[styles.text, {marginBottom: 10}]}>You usually encounter these inputs when you want to register to be a user of an application.
+            <Text style={styles.title}>`Compare` Rule</Text>
+            <Text style={styles.description}>You usually encounter these inputs when you want to register to be a user of an application.
             You need to input (create new) a password for the application and then re-type the same password in the second input. It's to make sure that
             the password you typed is really what you mean.</Text>
 
@@ -132,7 +132,7 @@ export default class extends React.Component {
                 Turn off your firewall for a while, before starting the server. It may block the connection.{'\n'}
                 From the top folder of package, run the following commands:{'\n'}
                 {'    '}<Text style={styles.textCode}>npm run build</Text>{'\n'}
-                {'    '}<Text style={styles.textCode}>node example/native/server.js</Text>{'\n'}
+                {'    '}<Text style={styles.textCode}>node example/server.js</Text>{'\n'}
                 Then, edit the server IP address in this page's source to be your local IP (do not use loopback host/IP such as localhost) 
                 </Text>
             </View>
