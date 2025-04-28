@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 const CheckBox = React.memo(function CheckBox({onValueChange, value = false, ...props}: React.ComponentProps<typeof ReactCheckBox>) {
     const pressHandler = React.useCallback(() => {
         if (typeof(onValueChange) == 'function') onValueChange(!value);
-    }, [onValueChange]);
+    }, [onValueChange, value]);
     
     return <Pressable hitSlop={0} pressRetentionOffset={0} style={styles.pressable} onPress={pressHandler}>
         <ReactCheckBox value={value} {...props} />

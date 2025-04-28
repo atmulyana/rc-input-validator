@@ -4,7 +4,31 @@
  */
 import type {CSSProperties} from "react";
 
+const tab: CSSProperties = {
+    backgroundColor: '#ccc',
+    borderColor: '#888',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    color: 'blue',
+    fontWeight: 'bold',
+    padding: '2px 4px',
+};
+
 const styles1 = {
+    footer: {
+        bottom: 0,
+        display: 'flex',
+        left: 0,
+        position: 'fixed',
+        width: '100%',
+    } as CSSProperties,
+    footerTab: {
+        ...tab,
+        borderWidth: 2,
+        flex: 1,
+        textAlign: 'center',
+        textDecoration: 'none',
+    } as CSSProperties,
     form: {
         marginLeft: 'auto',
         marginRight: 'auto',
@@ -14,20 +38,14 @@ const styles1 = {
         flex: 1,
         overflow: 'auto',
         padding: 8,
+        paddingBottom: 32,
     } as CSSProperties,
     pageTab: {
-        backgroundColor: '#ccc',
-        borderColor: 'gray',
-        borderWidth: 1,
+        ...tab,
         boxSizing: 'border-box',
-        color: 'blue',
         flex: '0 0 auto',
-        fontWeight: 'bold',
         height: 26,
         margin: 4,
-        padding: 2,
-        paddingLeft: 4,
-        paddingRight: 4,
         textDecoration: 'underline',
     } as CSSProperties,
     tabBar: {
@@ -103,11 +121,6 @@ const styles1 = {
     textPaddingVert: {
         paddingBottom: 4,
         paddingTop: 4,
-    } as CSSProperties,
-    textSlim: {
-        lineHeight: '16px',
-        paddingBottom: 0,
-        paddingTop: 0,
     } as CSSProperties,
     textSmall: {
         fontSize: 12,

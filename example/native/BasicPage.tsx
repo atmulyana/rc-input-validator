@@ -169,16 +169,16 @@ export default function BasicPage() {
         <View style={styles.inputRow}>
             <View style={styles.flex1} />
             <View style={styles.flex3}>
-                <View style={styles.horizontal}>
+                <View style={[styles.horizontal, styles.itemCenter]}>
                     <CheckBox 
                         boxType="square"
                         onCheckColor="black"
                         onValueChange={setConfirm}
                         tintColors={{false:styles.border.borderColor}} tintColor={styles.border.borderColor}
-                        style={[styles.border, {height: styles.text.lineHeight}]}
+                        style={styles.border}
                         value={confirm}
                     />
-                    <Text style={styles.text}>All data I filled above is true</Text>
+                    <Text style={[styles.text, {marginLeft: 4}]}>All data I filled above is true</Text>
                 </View>
                 <Validation
                     rules={rule(

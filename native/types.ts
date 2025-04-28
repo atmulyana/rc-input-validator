@@ -2,9 +2,10 @@
  * https://github.com/atmulyana/rc-input-validator
  */
 import type {
-    ContextValue as GlobalContextValue,
-    ValidationOption as GlobalValidationOption,
-    ValidationProps as GlobalValidationProps,
+    ContextProps as GenericContextProps,
+    ContextValue as GenericContextValue,
+    ValidationOption as GenericValidationOption,
+    ValidationProps as GenericValidationProps,
 } from "../types";
 
 type Falsy = undefined | null | false | "";
@@ -15,12 +16,13 @@ export type StyleProp< T = (Readonly<{[p: string]: unknown}> | AnyInterface) > =
     | RecursiveArray<T | Falsy>
     | Falsy;
 
-export type ContextValue = GlobalContextValue<StyleProp>;
-export type ValidationOption<Props, Value = unknown> = GlobalValidationOption<
+export type ContextProps = GenericContextProps<StyleProp>;
+export type ContextValue = GenericContextValue<StyleProp>;
+export type ValidationOption<Props, Value = unknown> = GenericValidationOption<
     Props,
     StyleProp,
     Props,
     StyleProp,
     Value
 >;
-export type ValidationProps = GlobalValidationProps<StyleProp>;
+export type ValidationProps = GenericValidationProps<StyleProp>;

@@ -1,6 +1,6 @@
 {
   "name": "rc-input-validator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Doing validation to the form inputs in react app (web and native)",
   "author": "AT Mulyana <atmulyana@yahoo.com>",
   "license": "MIT",

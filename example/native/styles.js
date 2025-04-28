@@ -31,6 +31,9 @@ const styles = Object.assign({}, StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 10,
     },
+    itemCenter: {
+        alignItems: 'center',
+    },
     text: {
         color: 'black',
         fontSize: 14,

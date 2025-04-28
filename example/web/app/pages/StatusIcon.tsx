@@ -83,7 +83,7 @@ const inputOptions: ValidationOption<ElementProps<HTMLInputElement>> = {
             return <ValidationStatus icon='x' style={iconStyles.error} />;
         }
         else if (style === null) {  //valid status after `validate` action
-            Object.assign(props, getStyleProps(context.normalStyle, textStyles.inputSuccess));
+            Object.assign(props, getStyleProps(context.normalStyle, textStyles.inputSuccess, textStyles.messageSuccess));
             context.flag = 1;
             return <ValidationStatus icon='check' message="Good phone number" style={iconStyles.success} />;
         }
@@ -112,12 +112,12 @@ export default function StatusIconPage() {
         <h3 style={styles.title}>Validation Status Icon</h3>
         <div style={styles.description}>We'll see more fancy validation status which uses an icon. The input is validated
         when it's lost of focus. Try to enter a valid and invalid phone number to the input (valid pattern:&nbsp;
-        <strong>0[1-9]dd-dddd-dddd</strong>)
+        <strong style={{whiteSpace: 'nowrap'}}>0[1-9]dd-dddd-dddd</strong>)
         </div>
 
         <div style={styles.inputRow}>
             <label style={styles.label}>Phone Number</label>
-            <Input ref={input} onBlur={inputOnBlur} style={styles.textInput1} rules={rules} settings={settings} />
+            <Input ref={input} autoComplete='off' onBlur={inputOnBlur} rules={rules} settings={settings} style={styles.textInput1} />
             <div style={styles.flex2}>&nbsp;</div>
         </div>
 

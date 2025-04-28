@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "ES2015",
-    "module": "Preserve",
+    "module": "CommonJS",
     "lib": [
       "dom",
       "dom.iterable",

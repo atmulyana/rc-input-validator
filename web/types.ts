@@ -3,9 +3,10 @@
  */
 import type {CSSProperties} from "react";
 import type {
-    ContextValue as GlobalContextValue,
-    ValidationOption as GlobalValidationOption,
-    ValidationProps as GlobalValidationProps,
+    ContextProps as GenericContextProps,
+    ContextValue as GenericContextValue,
+    ValidationOption as GenericValidationOption,
+    ValidationProps as GenericValidationProps,
 } from "../types";
 
 export type StyleProp = 
@@ -31,18 +32,19 @@ export type ElementProps<Instance = HTMLElement> = Omit<
 export type ExcludedPropNames = 'className' | 'style';
 export type OuterProps<Props extends ElementProps> = Omit<Props, ExcludedPropNames> & {style?: CompositeStyleProp};
 
-export type ContextValue = GlobalContextValue<StyleProp>;
+export type ContextProps = GenericContextProps<StyleProp>;
+export type ContextValue = GenericContextValue<StyleProp>;
 export type ValidationOption<
     Props extends ElementProps,
     Value = unknown
-> = GlobalValidationOption<
+> = GenericValidationOption<
     Props,
     StyleProp,
     OuterProps<Props>,
     CompositeStyleProp,
     Value
 >;
-export type ValidationProps = GlobalValidationProps<StyleProp>;
+export type ValidationProps = GenericValidationProps<StyleProp>;
 
 export type InputValue = string | readonly string[] | number | readonly File[];
 export type InputOptions = Array<{value: string, label?: string} | string>;

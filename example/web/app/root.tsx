@@ -5,6 +5,7 @@
 import React from 'react';
 import {
     isRouteErrorResponse,
+    Link,
     Links,
     Meta,
     Outlet,
@@ -62,6 +63,10 @@ export function Layout({children}: {children: React.ReactNode}) {
                 
                 <ScrollRestoration />
                 <Scripts />
+                <footer style={styles.footer}>
+                    <Link style={styles.footerTab} to={{pathname: '/'}}>Inline Style</Link>
+                    <Link style={styles.footerTab} to={{pathname: '/bootstrap'}}>Bootstrap</Link>
+                </footer>
             </body>
         </html>
     );

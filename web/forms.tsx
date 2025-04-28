@@ -217,7 +217,7 @@ type CheckBoxesProps = ElementProps
     };
 type CheckBoxesForwardProps = Omit<InputProps<CheckBoxesInstance, CheckBoxesProps, CheckBoxesValue>, 'Component'>;
 const HtmlCheckBoxes = React.forwardRef(function HtmlCheckBoxes(
-    {horizontal, name, onChange, options, style, value, ...props}: CheckBoxesProps,
+    {className, horizontal, name, onChange, options, style, value, ...props}: CheckBoxesProps,
     ref: React.Ref<CheckBoxesInstance>
 ) {
     const vals = Array.isArray(value) ? value :
@@ -263,6 +263,7 @@ const HtmlCheckBoxes = React.forwardRef(function HtmlCheckBoxes(
             defaultStyle.checkedInputs,
             horizontal ? {flexDirection: 'row'} : null,
             style,
+            className,
         ])}
         ref={_ref}
     >
@@ -302,7 +303,7 @@ type RadioButtonsProps = ElementProps
     };
 type RadioButtonsForwardProps = Omit<InputProps<RadioButtonsInstance, RadioButtonsProps, string>, 'Component'>;
 const HtmlRadioButtons = React.forwardRef(function HtmlRadioButtons(
-    {horizontal, name, onChange, options, style, value, ...props}: RadioButtonsProps,
+    {className, horizontal, name, onChange, options, style, value, ...props}: RadioButtonsProps,
     ref: React.Ref<RadioButtonsInstance>
 ) {
     const id = React.useId();
@@ -339,6 +340,7 @@ const HtmlRadioButtons = React.forwardRef(function HtmlRadioButtons(
             defaultStyle.checkedInputs,
             horizontal ? {flexDirection: 'row'} : null,
             style,
+            className,
         ])}
         ref={_ref}
         role='radiogroup'

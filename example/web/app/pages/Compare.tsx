@@ -26,7 +26,7 @@ export default class extends React.Component {
     render() {
         const validNotif = () => window.alert('All inputs are valid');
         
-        return <form ref={this.formRef} onSubmit={ev => ev.preventDefault()}> 
+        return <form ref={this.formRef} style={styles.form} onSubmit={ev => ev.preventDefault()}> 
         <ValidationContext ref={this.validationRef}>
             <h3 style={styles.title}>`Compare` Rule</h3>
             <div style={styles.description}>You usually encounter these inputs when you want to register to be a user of an application.
