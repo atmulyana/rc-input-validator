@@ -54,6 +54,9 @@ export const required: RequiredIf = new RequiredIf();
 required.setMessageFunc = function() {
     throw new Error("`required` rule object is shared among inputs. If you want to set message, use `new Required()` instead.");
 }
+required.notTrimmed = function() {
+    throw new Error("`required` rule object is shared among inputs. If you want to call `notTrimmed`, use `new Required()` instead.");
+}
 
 const isFalse = () => false;
 export const alwaysValid: Required = Required.If(isFalse);

@@ -42,7 +42,7 @@ export default function FileUploadPage() {
         <div style={styles.inputRow}>
             <label style={styles.label}>Images</label>
             <div style={Object.assign({}, styles.flex3, styles.vertical)}>
-                <Input type='file' multiple style={styles.textInput}
+                <Input type='file' multiple style={styles.textInput} value=''
                     rules={[
                         required,
                         fileType(type => type.startsWith('image/')),
@@ -50,7 +50,7 @@ export default function FileUploadPage() {
                     ]}
                 />
                 <small style={styles.textSmall}>
-                    Please some iamge files with maximum total size is 1M.
+                    Please select some image files with maximum total size is 1M.
                 </small>
             </div>
         </div>

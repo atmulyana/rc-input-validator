@@ -64,7 +64,7 @@ export function validationFactory<
                     const newStyle = [context.normalStyle, ...style];
                     setStyle(props, newStyle);
                 }
-                else {
+                else if (style !== false) { //`false` means re-rendering => the style has been reverted to normal by `setStyle`
                     setStyle(props, context.normalStyle);
                 }
                 return null;
@@ -129,7 +129,7 @@ export function validationFactory<
             styleContext: {
                 clearValidation: () => void,
                 flag: any,
-                normalStyle?: StyleProp,
+                readonly normalStyle?: StyleProp,
             } = {
                 clearValidation: noop,
                 flag: 0,

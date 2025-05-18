@@ -13,12 +13,16 @@ function mock_setRef(refProp, ref) {
     else if (refProp && typeof(refProp) == 'object') refProp.current = ref;
 }
 
+let mock_inputValue = '';
 jest.mock('reactjs-common', 
     () => ({
         __esModule: true,
         setRef: mock_setRef,
         extRefCallback(refProp, extRef, callback) {
             return ref => {
+                if (typeof(extRef) == 'function') {
+                    extRef = extRef(ref);
+                }
                 let newRef = extRef;
                 if ('getInput' in extRef) { //Form
                     newRef = {
@@ -26,6 +30,13 @@ jest.mock('reactjs-common',
                         submit() {
                         },
                     };
+                }
+                else {
+                    newRef = {
+                        //...extRef,  //Cannot be like this, `extRef` is a proxy object
+                        value: mock_inputValue,
+                    };
+                    Object.setPrototypeOf(newRef, extRef);
                 }
                 mock_setRef(refProp, newRef);
                 if (typeof(callback) == 'function') callback(newRef);
@@ -36,7 +47,8 @@ jest.mock('reactjs-common',
 
 
 let formRef, inputRef;
-const Form = ({inputStyle, inputValue, onSubmit}) =>
+const Form = ({inputStyle, inputValue, onSubmit}) => (
+    mock_inputValue = inputValue,
     <Form1 ref={ref => formRef = ref} onSubmit={onSubmit}>
         <Input ref={ref => inputRef = ref}
             name="input1"
@@ -44,7 +56,8 @@ const Form = ({inputStyle, inputValue, onSubmit}) =>
             style={inputStyle}
             value={inputValue}
         />
-    </Form1>;
+    </Form1>
+);
 
 const inputStyle = {
     borderColor: 'gray',

@@ -66,9 +66,11 @@ const shiftRules = [
 
 export default function BasicPage() {
     const formRef = React.useRef<HTMLFormElement & ContextRef>(null);
+    const [domicile, setDomicile] = React.useState('xyz');
+    const [hobbies, setHobbies] = React.useState<string | readonly string[]>('xyz');
     const [confirm, setConfirm] = React.useState(false);
-    
-    return <Form ref={formRef} style={styles.form} onSubmit={ev => ev.preventDefault()}>
+
+    return <Form ref={formRef} contextProps={{focusOnInvalid: true}} style={styles.form} onSubmit={ev => ev.preventDefault()}>
         <h3 style={styles.title}>Employee Data Form</h3>
         <div style={styles.description}>
             It's a weird employee data form but, here, we're focusing on how the input validation works.
@@ -103,7 +105,9 @@ export default function BasicPage() {
 
         <div style={styles.inputRow}>
             <label style={styles.label}>Domicile</label>
-            <Select id='domiileOptions' rules={required} style={styles.textInput1}>
+            <Select rules={required} style={styles.textInput1}
+                value={domicile} onChange={ev => setDomicile(ev.target.value)}
+            >
                 <option value="">--Please Choose--</option>
                 <option value="center">Center Area</option>
                 <option value="east">East Area</option>
@@ -120,7 +124,6 @@ export default function BasicPage() {
                 rules={[
                     rule(
                         value => {
-                            const domicile = (document.getElementById('domiileOptions') as HTMLSelectElement)?.value;
                             if (value == 'foot') {
                                 return domicile == 'center' || domicile === '';
                             }
@@ -184,7 +187,7 @@ export default function BasicPage() {
 
         <div style={styles.inputRow}>
             <label style={styles.label}>Hobby</label>
-            <CheckBoxes rules={alwaysValid} options={hobbyOptions} style={{$cover: styles.flex1}}
+            <CheckBoxes rules={alwaysValid} options={hobbyOptions} style={{$cover: styles.flex1}} value={hobbies}
                 settings={{
                     setStatusStyle: (props, style, context) => {
                         const setValidStyle = () => {
@@ -230,7 +233,7 @@ export default function BasicPage() {
                     },
                 }}
             />
-            <div style={styles.flex2}>&nbsp;</div>
+            <div style={styles.flex2}><button type='button' onClick={() => setHobbies([])}>Clear</button></div>
         </div>
         
         <div style={styles.inputRow}>&nbsp;</div>

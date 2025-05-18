@@ -6,7 +6,8 @@ you can change the inputs' appearance when they are invalid or also valid after 
 as depicted by the pictures below:  
 
 ![validation for different types of inputs](./docs/images/validation-1.png)  
-![validation with status icon](./docs/images/status-icon.png)
+![validation with status icon](./docs/images/status-icon.png)  
+![file upload](./docs/images/file-upload.jpg)
 
 It's very useful before submitted to the server.
 

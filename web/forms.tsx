@@ -1,9 +1,10 @@
 /**
  * https://github.com/atmulyana/rc-input-validator
  */
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import {emptyString, extendObject, noop, proxyObject} from 'javascript-common';
 import {extRefCallback, setRef} from 'reactjs-common';
+import {useState} from '../helpers';
 import type {ContextRef, InputRef} from "../types";
 import {
     defaultStyle,
@@ -14,6 +15,7 @@ import type {
     InputBaseProps,
     InputOptions,
     InputProps,
+    StyleProp,
 } from './types';
 import {ValidationContext} from './Context';
 import {ValidatedInput} from './Validation';
@@ -71,6 +73,7 @@ export const Form = React.forwardRef(function Form(
     </ValidationContext>;
 });
 
+
 class FileArray extends Array<File> {
     #firstPath = '';
     get firstPath() { return this.#firstPath; }
@@ -78,107 +81,227 @@ class FileArray extends Array<File> {
         super(...Array.from(files));
         this.#firstPath = firstPath;
     }
+    toString() {
+        return this.#firstPath;
+    }
 }
 
 type InputValue<Type> = Type extends 'number' | 'range' ? number :
-                        Type extends 'file' ? readonly File[] :
                         string;
-type InpProps<Type> = Omit<
+type InputPropValue<Type> = Type extends 'file' ? '' : InputValue<Type>;
+type InputRefValue<Type> = Type extends 'file' ? readonly File[] : InputValue<Type>;
+//@ts-ignore: we need to define the new type of `value`
+export interface HtmlInputRef<Type extends string = string> extends HTMLInputElement {
+    type: Type,
+    value: InputRefValue<Type>,
+}
+type InpProps<Type extends string> = Omit<
     React.ComponentProps<'input'>,
-    'defaultChecked' | 'defaultValue' | 'type' | 'value'
+    'defaultChecked' | 'defaultValue' | 'onChange' | 'type' | 'ref' | 'style' | 'value'
 > & {
+    onChange?: React.ChangeEventHandler<HtmlInputRef<Type>>,
     type?: Type,
-    value?: InputValue<Type>,
+    style?: StyleProp,
+    value?: InputRefValue<Type>,
 };
-type InputForwardProps<Type> = Omit<
-    InputProps<HTMLInputElement, InpProps<Type>, InputValue<Type>>,
-    'Component'
->;
-const HtmlInput = React.forwardRef(function HtmlInput<Type extends React.HTMLInputTypeAttribute>(
-    {onChange, type, value, ...props}: InpProps<Type>,
-    ref: React.Ref<HTMLInputElement>
-) {
-    const changeHandler: NonNullable<InputBaseProps<HTMLInputElement, InputValue<Type>>['onChange']> = ev => {
-        const target = ev.target;
-        ev.target = extendObject(target, {
-            get value() {
-                if (['number', 'range'].includes(type as any)) {
-                    return parseFloat(target.value); //if the value typed is an invalid numeric, `target.value` will be an empty string
-                }
-                else if (type == 'file') {
-                    return new FileArray(target.value, target.files as FileList);
-                }
-                return target.value;
+//@ts-ignore: consider that `HtmlInputRef<Type>` can be casted to `HTMLInputElement`  
+type InpInputProps<Type extends string> = InputProps<HtmlInputRef<Type>, InpProps<Type>, InputPropValue<Type>, InputRefValue<Type>>;
+type InputOuterProps<Type extends string> = Omit<InpInputProps<Type>, 'Component'>;
+function inputValue<Type extends string>(input: HTMLInputElement) {
+    return {
+        get type() {
+            return input.type as Type;
+        },
+        get value() {
+            let val: any;
+            if (['number', 'range'].includes(input.type)) {
+                val = parseFloat(input.value); //if the value typed is an invalid numeric, `input.value` will be an empty string
             }
-        });
-        if (onChange) onChange(ev);
+            else if (input.type == 'file') {
+                val = new FileArray(input.value, input.files as FileList);
+            }
+            else {
+                val = input.value;
+            }
+            return val as InputRefValue<Type>;
+        },
+        set value(val) {
+            if (input.type == 'file') {
+            }
+            else if (typeof(val) == 'number') {
+                input.value = isNaN(val) ? emptyString : val + emptyString;
+            }
+            else {
+                input.value = val as string;
+            }
+        },
+    }
+}
+const HtmlInput = React.forwardRef(function HtmlInput<Type extends React.HTMLInputTypeAttribute = 'text'>(
+    {onChange, style, type, value, ...props}: InpProps<Type>,
+    ref: React.Ref<HtmlInputRef<Type>>
+) {
+    const changeHandler: React.ChangeEventHandler<HTMLInputElement> = ev => {
+        if (onChange) {
+            const target = ev.target;
+            const event = ev as React.ChangeEvent<HtmlInputRef<Type>>;
+            event.target = extendObject(target, inputValue<Type>(target));
+            onChange(event);
+        }
     };
-
+    const $ref = extRefCallback<HTMLInputElement, Pick<HtmlInputRef<Type>, 'type' | 'value'>>(
+        //@ts-ignore: we need to define the new type of `value`
+        ref, /*must not be `null`, refers to `refCallback` in `forwardRef` in "../Validation.tsx"*/
+        _ref => inputValue(_ref)
+    );
 
     return <input
         {...props}
-        ref={ref}
+        ref={$ref}
         onChange={changeHandler}
+        style={style as CSSProperties | undefined /* has been converted by `setStyle` (`setStyleDefault`) in `withValidation` */}
         type={type}
         value={
-            Array.isArray(value) ? (value as FileArray)?.firstPath ?? emptyString :
             typeof(value) == 'string' ? value :
-            isNaN(value as any) ? emptyString : (value as number)
+            typeof(value) == 'number' ? (isNaN(value) ? emptyString : value) :
+            value ? (value as FileArray).firstPath :
+            value
         }
     />;
 });
-export const Input = React.forwardRef(function Input<Type extends React.HTMLInputTypeAttribute>(
-    props: InputForwardProps<Type>,
-    ref: React.Ref<HTMLInputElement & InputRef>
+HtmlInput.displayName = 'HtmlInput';
+export const Input = React.forwardRef(function Input<Type extends React.HTMLInputTypeAttribute = 'text'>(
+    props: InputOuterProps<Type>,
+    ref: React.Ref<HtmlInputRef<Type> & InputRef>
 ) {
-    const InputComponent = ValidatedInput as React.AbstractComponent<
-        InputProps<HTMLInputElement, InpProps<Type>, InputValue<Type>>,
-        HTMLInputElement & InputRef
-    >;
-    return <InputComponent {...props} Component={HtmlInput} ref={ref} />;
-});
+    const InputComponet = ValidatedInput as (
+        (
+            props: InpInputProps<Type> & React.RefAttributes<HtmlInputRef<Type> & InputRef>
+        ) => React.ReactNode
+    );
+    return <InputComponet {...props} Component={HtmlInput} ref={ref} />;
+}) as ({
+    /**
+     * Needs to cast to a Function Component so that `Type` type has the effect. If not casted then
+     *      <Input type="number" value="a value" ... >
+     * will be no type error even though `value` is a string. It should be a number.
+     */
+    <Type extends React.HTMLInputTypeAttribute = 'text'>(
+        props: InputOuterProps<Type> & React.RefAttributes<HtmlInputRef<Type> & InputRef>
+    ): React.ReactNode,
 
-type SelectValue<Multiple> = Multiple extends true ? readonly string[] : string;
-type SelectProps<Multiple> = Omit<
+    displayName: 'Input',
+});
+Input.displayName = 'Input';
+
+
+type SelectValue<Multiple> = Multiple extends true ? readonly string[] :
+                             Multiple extends false ? string : string;
+//@ts-ignore: we need to define the new type of `value`
+export interface HtmlSelectRef<Multiple extends (boolean | undefined) = boolean> extends HTMLSelectElement {
+    multiple: NonNullable<Multiple>,
+    value: SelectValue<Multiple>
+}
+type SelectProps<Multiple extends (boolean | undefined)> = Omit<
     React.ComponentProps<'select'>,
-    'defaultChecked' | 'defaultValue' | 'multiple' | 'value'
+    'defaultChecked' | 'defaultValue' | 'multiple' | 'onChange' | 'ref' | 'style' | 'value'
 > & {
     multiple?: Multiple,
+    onChange?: React.ChangeEventHandler<HtmlSelectRef<Multiple>>,
+    style?: StyleProp,
     value?: SelectValue<Multiple>,
 };
-type SelectForwardProps<Multiple> = Omit<InputProps<HTMLSelectElement, SelectProps<Multiple>, SelectValue<Multiple>>, 'Component'>;
-const HtmlSelect = React.forwardRef(function HtmlSelect<Multiple extends boolean>(
-    {children, multiple, onChange, value, ...props}: SelectProps<Multiple>,
-    ref: React.Ref<HTMLSelectElement>
-) {
-    const changeHandler: NonNullable<InputBaseProps<HTMLSelectElement, SelectValue<Multiple>>['onChange']> = ev => {
-        const target = ev.target;
-        ev.target = extendObject(target, {
-            get value() {
-                if (multiple) {
-                    return [...target.selectedOptions].map(opt => opt.value);
-                }
-                return target.value;
+type SelectInputProps<Multiple extends (boolean | undefined)> =
+    //@ts-ignore: consider that `HtmlSelectRef<Multiple>` can be casted to `HTMLSelectElement`
+    InputProps<HtmlSelectRef<Multiple>, SelectProps<Multiple>, SelectValue<Multiple>>;
+type SelectOuterProps<Multiple extends (boolean | undefined)> = Omit<SelectInputProps<Multiple>, 'Component'>;
+function selectValue<Multiple>(input: HTMLSelectElement) {
+    return {
+        get multiple() {
+            return input.multiple as NonNullable<Multiple>;
+        },
+        get value() {
+            let val: any;
+            if (input.multiple) {
+                val = [...input.selectedOptions].map(opt => opt.value);
             }
-        });
-        if (onChange) onChange(ev);
+            else {
+                val = input.value;
+            }
+            return val as SelectValue<Multiple>;
+        },
+        set value(val) {
+            const vals = Array.isArray(val) ? (val as string[]) : [val as string];
+            const values = new Set(vals)
+            for (let i = 0; i < input.options.length; i++) {
+                const item = input.options.item(i);
+                if (!item) continue;
+                item.selected = values.has(item.value);
+                if (item.selected && !input.multiple) break; //if not multiple then only one selected
+            }
+        },
+    }
+}
+const HtmlSelect = React.forwardRef(function HtmlSelect<Multiple extends (boolean | undefined)>(
+    {children, multiple, onChange, style, value, ...props}: SelectProps<Multiple>,
+    ref: React.Ref<HtmlSelectRef<Multiple>>
+) {
+    const changeHandler: React.ChangeEventHandler<HTMLSelectElement> = ev => {
+        if (onChange) {
+            const target = ev.target;
+            const event = ev as React.ChangeEvent<HtmlSelectRef<Multiple>>;
+            event.target = extendObject(target, selectValue<Multiple>(target));
+            onChange(event);
+        }
     };
-    return <select {...props} ref={ref} multiple={multiple} onChange={changeHandler}
-        value={multiple && !Array.isArray(value) ? [value as string] : value}
+    const $ref = extRefCallback<HTMLSelectElement, Pick<HtmlSelectRef<Multiple>, 'multiple' | 'value'>>(
+        //@ts-ignore: about `value` type ==> we need to define the new type of `value`
+        ref, /*must not be `null`, refers to `refCallback` in `forwardRef` in "../Validation.tsx"*/
+        _ref => selectValue<Multiple>(_ref)
+    );
+    return <select
+        {...props}
+        ref={$ref}
+        multiple={multiple}
+        onChange={changeHandler}
+        style={style as CSSProperties | undefined /* has been converted by `setStyle` (`setStyleDefault`) in `withValidation` */}
+        value={
+            multiple ? (
+                Array.isArray(value) ? value :
+                value                ? [value] :
+                                       (value ?? []) || [emptyString] 
+            ) :
+            value
+        }
     >
         {children}
     </select>;
 });
-export const Select = React.forwardRef(function Select<Multiple extends boolean>(
-    props: SelectForwardProps<Multiple>,
-    ref: React.Ref<HTMLSelectElement & InputRef>
+HtmlSelect.displayName = 'HtmlSelect';
+export const Select = React.forwardRef(function Select<Multiple extends (boolean | undefined) = false>(
+    props: SelectOuterProps<Multiple>,
+    ref: React.Ref<HtmlSelectRef<Multiple> & InputRef>
 ) {
-    const InputComponent = ValidatedInput as React.AbstractComponent<
-        InputProps<HTMLSelectElement, SelectProps<Multiple>, SelectValue<Multiple>>,
-        HTMLSelectElement & InputRef
-    >;
-    return <InputComponent {...props} Component={HtmlSelect} ref={ref} />;
+    const InputComponet = ValidatedInput as (
+        (
+            props: SelectInputProps<Multiple> & React.RefAttributes<HtmlSelectRef<Multiple> & InputRef>
+        ) => React.ReactNode
+    );
+    return <InputComponet {...props} Component={HtmlSelect} ref={ref} />;
+}) as ({
+    /**
+     * Needs to cast to a Function Component so that `Multiple` type has the effect. If not casted then
+     *      <Select multiple value="a value" ... >
+     * will be no type error even though `value` is a string. It should be an array of string.
+     */
+    <Multiple extends (boolean | undefined) = false>(
+        props: SelectOuterProps<Multiple> & React.RefAttributes<HtmlSelectRef<Multiple> & InputRef>
+    ): React.ReactNode,
+
+    displayName: 'Select',
 });
+Select.displayName = "Select";
+
 
 type TextAreaProps = Omit<
     React.ComponentProps<'textarea'>,
@@ -193,65 +316,63 @@ const HtmlTextArea = React.forwardRef(function HtmlTextArea(
 ) {
     return <textarea {...props} ref={ref} />;
 });
+HtmlTextArea.displayName = 'HtmlTextArea';
 export const TextArea = React.forwardRef(function TextArea(
     props: TextAreaForwardProps,
     ref: React.Ref<HTMLTextAreaElement & InputRef>
 ) {
-    const InputComponent = ValidatedInput as React.AbstractComponent<
-        InputProps<HTMLTextAreaElement, TextAreaProps, string>,
-        HTMLTextAreaElement & InputRef
-    >;
-    return <InputComponent {...props} Component={HtmlTextArea} ref={ref} />;
+    return <ValidatedInput {...props} Component={HtmlTextArea} ref={ref} />;
 });
+TextArea.displayName = 'TextArea';
+
 
 type CheckBoxesValue = string | readonly string[];
-interface CheckBoxesInstance extends HTMLElement {
+interface CheckBoxesInstance extends HTMLDivElement {
     focus: () => void,
-    value?: CheckBoxesValue
+    value: readonly string[]
 }
-type CheckBoxesProps = ElementProps
-    & InputBaseProps<CheckBoxesInstance, CheckBoxesValue>
+type CheckBoxesProps = ElementProps<CheckBoxesInstance, readonly string[]>
+    & InputBaseProps<CheckBoxesInstance, readonly string[]>
     & {
         horizontal?: boolean,
         options: InputOptions,
     };
-type CheckBoxesForwardProps = Omit<InputProps<CheckBoxesInstance, CheckBoxesProps, CheckBoxesValue>, 'Component'>;
+type CheckBoxesOuterProps = Omit<InputProps<CheckBoxesInstance, CheckBoxesProps, CheckBoxesValue, readonly string[]>, 'Component'>;
 const HtmlCheckBoxes = React.forwardRef(function HtmlCheckBoxes(
-    {className, horizontal, name, onChange, options, style, value, ...props}: CheckBoxesProps,
+    {className, horizontal, name, onChange, options, style, value = [], ...props}: CheckBoxesProps,
     ref: React.Ref<CheckBoxesInstance>
 ) {
-    const vals = Array.isArray(value) ? value :
-                 value ? [value] : [];
     const id = React.useId();
-    let containerObj!: CheckBoxesInstance;
-    const _ref = extRefCallback<HTMLElement, {focus: () => void, value?: CheckBoxesValue}>(
-        ref, /*must not be `null`, refers to `refCallback` in `forwardRef` in "../Validation.tsx"*/
-        {
-            focus() {
-                containerObj?.querySelector('input')?.focus();
-            },
-            value,
-        },
-        newRef => containerObj = newRef
-    );
+    const state = useState(() => {
+        const state = {
+            ref: null as (CheckBoxesInstance | null),
+            refCallback: extRefCallback<HTMLDivElement, Pick<CheckBoxesInstance, 'focus' | 'value'>>(
+                ref, /*must not be `null`, refers to `refCallback` in `forwardRef` in "../Validation.tsx"*/
+                {
+                    focus() {
+                        state.ref?.querySelector('input')?.focus();
+                    },
+                    get value() {
+                        const vals: string[] = [];
+                        state.ref?.querySelectorAll('input:checked').forEach(
+                            item => vals.push((item as HTMLInputElement).value)
+                        );
+                        return vals;
+                    },
+                },
+                newRef => state.ref = newRef
+            ),
+        }
+        return state;
+    });
     
     const changeHandler: React.ChangeEventHandler<HTMLInputElement> = ev => {
-        if (onChange) {
-            let newValue: string[];
-            if (ev.target.checked) {
-                newValue = [...vals, ev.target.value];
-            }
-            else {
-                newValue = vals.filter(item => item != ev.target.value);
-            }
-
-            const event: React.ChangeEvent<CheckBoxesInstance> = {
-                ...ev,
-                target: { 
-                    ...containerObj,
-                    value: newValue,
-                }
-            };
+        if (onChange && state.ref) {
+            const event: React.ChangeEvent<CheckBoxesInstance> = extendObject(ev, {
+                type: 'change',
+                target: state.ref,
+                currentTarget: state.ref,
+            });
             onChange(event);
         }
     };
@@ -265,7 +386,7 @@ const HtmlCheckBoxes = React.forwardRef(function HtmlCheckBoxes(
             style,
             className,
         ])}
-        ref={_ref}
+        ref={state.refCallback}
     >
         {options.map((option, idx) => (
             opt = typeof(option) == 'string' ? {value: option} : option,
@@ -276,26 +397,30 @@ const HtmlCheckBoxes = React.forwardRef(function HtmlCheckBoxes(
                     name={name}
                     type='checkbox'
                     value={opt.value}
-                    checked={vals.includes(opt.value)}
+                    checked={value.includes(opt.value)}
                     onChange={changeHandler}
                 /><label htmlFor={key}>&nbsp;{opt.label ?? opt.value}</label>
             </span>
         ))}
     </div>;
 });
+HtmlCheckBoxes.displayName = 'HtmlCheckBoxes';
 export const CheckBoxes = React.forwardRef(function CheckBoxes(
-    props: CheckBoxesForwardProps,
+    {value, ...props}: CheckBoxesOuterProps,
     ref: React.Ref<CheckBoxesInstance & InputRef>
 ) {
-    //@ts-expect-error
-    return <ValidatedInput {...props} Component={HtmlCheckBoxes} ref={ref} />;
+    const vals: readonly string[] = Array.isArray(value) ? value :
+                                    value ? [value] : [];
+    return <ValidatedInput {...props} Component={HtmlCheckBoxes} ref={ref} value={vals} />;
 });
+CheckBoxes.displayName = 'CheckBoxes';
 
-interface RadioButtonsInstance extends HTMLElement {
+
+interface RadioButtonsInstance extends HTMLDivElement {
     focus: () => void,
-    value?: string,
+    value: string,
 }
-type RadioButtonsProps = ElementProps
+type RadioButtonsProps = ElementProps<RadioButtonsInstance, string>
     & InputBaseProps<RadioButtonsInstance, string>
     & {
         horizontal?: boolean,
@@ -308,27 +433,32 @@ const HtmlRadioButtons = React.forwardRef(function HtmlRadioButtons(
 ) {
     const id = React.useId();
     name = name || id;
-    let containerObj!: RadioButtonsInstance;
-    const _ref = extRefCallback<HTMLElement, {focus: () => void, value?: string}>(
-        ref, /*must not be `null`, refers to `refCallback` in `forwardRef` in "../Validation.tsx"*/
-        {
-            focus() {
-                containerObj?.querySelector('input')?.focus();
-            },
-            value,
-        },
-        newRef => containerObj = newRef
-    );
+    const state = useState(() => {
+        const state = {
+            ref: null as (RadioButtonsInstance | null),
+            refCallback: extRefCallback<HTMLDivElement, Pick<RadioButtonsInstance, 'focus' | 'value'>>(
+                ref, /*must not be `null`, refers to `refCallback` in `forwardRef` in "../Validation.tsx"*/
+                {
+                    focus() {
+                        state.ref?.querySelector('input')?.focus();
+                    },
+                    get value(): string {
+                        return (state.ref?.querySelector('input:checked') as HTMLInputElement)?.value ?? emptyString;
+                    },
+                },
+                newRef => state.ref = newRef
+            ),
+        }
+        return state;
+    });
     
     const clickHandler: React.MouseEventHandler<HTMLInputElement> = ev => {
-        if (onChange) {
-            const event: React.ChangeEvent<RadioButtonsInstance> = {
-                ...ev,
-                target: { 
-                    ...containerObj,
-                    value: ev.currentTarget.value,
-                }
-            };
+        if (onChange && state.ref) {
+            const event: React.ChangeEvent<RadioButtonsInstance> = extendObject(ev, {
+                type: 'change',
+                target: state.ref,
+                currentTarget: state.ref,
+            });
             onChange(event);
         }
     };
@@ -342,7 +472,7 @@ const HtmlRadioButtons = React.forwardRef(function HtmlRadioButtons(
             style,
             className,
         ])}
-        ref={_ref}
+        ref={state.refCallback}
         role='radiogroup'
     >
         {options.map((option, idx) => (
@@ -362,10 +492,11 @@ const HtmlRadioButtons = React.forwardRef(function HtmlRadioButtons(
         ))}
     </div>;
 });
+HtmlRadioButtons.displayName = 'HtmlRadioButtons';
 export const RadioButtons = React.forwardRef(function RadioButtons(
     props: RadioButtonsForwardProps,
     ref: React.Ref<RadioButtonsInstance & InputRef>
 ) {
-    //@ts-expect-error
     return <ValidatedInput {...props} Component={HtmlRadioButtons} ref={ref} />;
 });
+RadioButtons.displayName = 'RadioButtons';

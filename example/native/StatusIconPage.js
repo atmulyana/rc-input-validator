@@ -73,7 +73,7 @@ const Input = withValidation(TextInput, {
     setStatusStyle: (props, style, context) => {
         if (style) { //invalid status after validate or re-render when invalid
             props.style = [context.normalStyle, style];
-            {/** Show a status icon. By using absolute positioning, the icon is placed at the right side of input */}
+            /** Show a status icon. By using absolute positioning, the icon is placed at the right side of input */
             return <ValidationStatus icon={X} style={iconStyles.error} />;
         }
         else if (style === null) {  //valid status after `validate` action
@@ -81,16 +81,17 @@ const Input = withValidation(TextInput, {
             context.flag = 1;
             return <ValidationStatus icon={Check} message="Good phone number" style={iconStyles.success} />;
         }
-        else { //clear action or re-render when valid
-            props.style = context.normalStyle;
-            
-            /** Not like invalid status which is automatically cleared when starts editing, valid status needs manually clearing */
-            if (
-                style === false // re-render such as because of editing value
-                && context.flag === 1 //It's set above when valid after `validate` action
-            ) {
-                context.clearValidation();
-                context.flag = 0;
+        else { //clear action or re-rendering when valid
+            if (style === false) { // re-render such as because of editing value
+                if (context.flag === 1) { //It's set above when valid after `validate` action
+                    /** Not like invalid status which is automatically cleared when starts editing, valid status needs manually clearing */
+                    context.clearValidation();
+                    context.flag = 0;
+                }
+            }
+            else { //after `clearValidation`
+                //When re-rendering, it doesn't need to revert style because it has been done by `setStyle`
+                props.style = context.normalStyle;
             }
             return null;
         }

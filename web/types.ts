@@ -25,43 +25,55 @@ export type CompositeStyleProp =
     }
     | StyleProp;
 
-export type ElementProps<Instance = HTMLElement> = Omit<
+export type InputValue = string | readonly string[] | number;
+export type InputRefValue = InputValue | readonly File[];
+export type InputOptions = Array<{value: string, label?: string} | string>;
+
+export type ElementProps<
+    Instance = HTMLElement,
+    RefValue = unknown,
+> = Omit<
     React.DetailedHTMLProps<React.HTMLAttributes<Instance>, Instance>,
-    'onChange' | 'ref' | 'style'
-> & {style?: StyleProp};
-export type ExcludedPropNames = 'className' | 'style';
-export type OuterProps<Props extends ElementProps> = Omit<Props, ExcludedPropNames> & {style?: CompositeStyleProp};
+    'onChange' | 'ref' | 'style' | 'value'
+> & {
+    style?: StyleProp,
+    value?: RefValue,
+};
+export type ExcludedPropNames = 'className' | 'style' | 'ref' | 'value';
+export type OuterProps<Props extends ElementProps, Value = unknown> = Omit<Props, ExcludedPropNames> & {
+    style?: CompositeStyleProp,
+    value?: Value,
+};
 
 export type ContextProps = GenericContextProps<StyleProp>;
 export type ContextValue = GenericContextValue<StyleProp>;
 export type ValidationOption<
-    Props extends ElementProps,
-    Value = unknown
+    Props extends ElementProps<HTMLElement, RefValue>,
+    Value = unknown,
+    RefValue = Value
 > = GenericValidationOption<
     Props,
     StyleProp,
-    OuterProps<Props>,
+    OuterProps<Props, Value>,
     CompositeStyleProp,
-    Value
+    RefValue
 >;
 export type ValidationProps = GenericValidationProps<StyleProp>;
 
-export type InputValue = string | readonly string[] | number | readonly File[];
-export type InputOptions = Array<{value: string, label?: string} | string>;
 export type InputBaseProps<
-    Instance extends HTMLElement & {value?: any},
-    Value extends InputValue
+    Instance extends HTMLElement & {value: RefValue},
+    RefValue extends InputRefValue,
 > = {
     name?: string,
-    onChange?: React.ChangeEventHandler<Instance & {value?: Value}>,
-    value?: Value,
+    onChange?: React.ChangeEventHandler<Instance>,
 };
 export type InputProps<
-    Instance extends HTMLElement & {value?: any},
-    Props extends ElementProps & InputBaseProps<Instance, Value>,
+    Instance extends HTMLElement & {value: RefValue},
+    Props extends ElementProps<Instance, RefValue> & InputBaseProps<Instance, RefValue>,
     Value extends InputValue,
+    RefValue extends InputRefValue = Value,
 > = {
     Component: React.AbstractComponent<Props, Instance>,
     rules: ValidationOption<Props, any>['rules'],
-    settings?: Omit<ValidationOption<Props>, 'getValue' | `getStyle` | 'name' | 'rules'>,
-} & OuterProps<Props>;
+    settings?: Omit<ValidationOption<Props>, 'getValue' | `getStyle` | 'name' | 'rules' | 'setStyle'>,
+} & OuterProps<Props, Value>;

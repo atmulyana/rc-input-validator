@@ -27,10 +27,10 @@ export default class FileCheck extends ValidationRule<File | readonly File[]> {
     #message: string = messages.fileCheck;
     #validateFunc!: TValidateFunc;
 
-    constructor(validateFunc: TValidateFunc, message: string) {
+    constructor(validateFunc: TValidateFunc, message?: string) {
         super();
         this.#validateFunc = validateFunc.bind(this);
-        this.#message = message;
+        if (message) this.#message = message;
     }
 
     get errorMessage() {
@@ -43,3 +43,5 @@ export default class FileCheck extends ValidationRule<File | readonly File[]> {
         return this;
     }
 }
+
+export const fileCheck = (validateFunc: TValidateFunc, message?: string) => new FileCheck(validateFunc, message);

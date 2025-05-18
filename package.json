@@ -1,6 +1,6 @@
 {
   "name": "rc-input-validator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Doing validation to the form inputs in react app (web and native)",
   "author": "AT Mulyana <atmulyana@yahoo.com>",
   "license": "MIT",
@@ -36,6 +36,9 @@
     "types.ts",
     "Validation.tsx"
   ],
+  "dependencies": {
+    "reactjs-common": ">=0.1.0"
+  },
   "peerDependencies": {
     "jssimpledateformat": "^3.0.3",
     "react": ">=16.8",
@@ -67,8 +70,5 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(javascript-common|@react-native|react-native|reactjs-common)/)"
     ]
-  },
-  "dependencies": {
-    "reactjs-common": "^0.0.4"
   }
 }

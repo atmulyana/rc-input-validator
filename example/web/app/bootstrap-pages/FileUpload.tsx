@@ -49,7 +49,7 @@ export default function FileUploadPage() {
                     ]}
                 />
                 <small>
-                    Please some iamge files with maximum total size is 1M.
+                    Please select some images files with maximum total size is 1M.
                 </small>
             </div>
         </div>

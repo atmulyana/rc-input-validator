@@ -52,3 +52,8 @@ test('validation: dissallowing setMessageFunc call on `required`', () => {
     expect(() => required.setMessageFunc(() => '')).toThrow();
     expect(() => new Required().setMessageFunc(() => '')).not.toThrow();
 });
+
+test('validation: dissallowing notTrimmed call on `required`', () => {
+    expect(() => required.notTrimmed()).toThrow();
+    expect(() => new Required().notTrimmed()).not.toThrow();
+});

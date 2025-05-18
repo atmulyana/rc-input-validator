@@ -35,7 +35,7 @@ export default class extends React.Component {
 
             <div style={styles.inputRow}>
                 <label style={styles.label}>Password</label>
-                <Input type='password' ref={this.passwordRef} name='password' style={styles.textInput1}
+                <Input type='password' ref={this.passwordRef} name='password' style={styles.textInput1} autoComplete='new-password'
                     rules={[
                         required,
                         length(8),
@@ -52,7 +52,7 @@ export default class extends React.Component {
 
             <div style={styles.inputRow}>
                 <label style={styles.label}>Confirm Password</label>
-                <Input type='password' name='confirmPassword' style={styles.textInput1}
+                <Input type='password' name='confirmPassword' style={styles.textInput1} autoComplete='new-password'
                     rules={[
                         /*Required.If*/required.if(() => this.passwordRef.current?.isValid ?? false),
                         rule(

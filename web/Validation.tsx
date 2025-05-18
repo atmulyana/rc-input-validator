@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import {emptyString} from 'javascript-common';
+import {setRef} from 'reactjs-common';
 import {useState} from '../helpers';
 import type {InputRef} from "../types";
 import {validationFactory} from '../Validation';
@@ -17,6 +18,7 @@ import type {
     ExcludedPropNames,
     InputBaseProps,
     InputProps,
+    InputRefValue,
     InputValue,
     OuterProps,
     StyleProp,
@@ -67,10 +69,19 @@ const {withValidation, Validation} = validationFactory<StyleProp, StyleProp, Com
 
 export {Validation};
 
+function arrayEqual(ar1: any[], ar2: any[]) {
+    if (ar1.length != ar2.length) return false;
+    for (let i = 0; i < ar1.length; i++) {
+        if (ar1[i] !== ar2[i]) return false;
+    }
+    return true;
+}
+
 export const ValidatedInput = React.forwardRef(function ValidatedInput<
-    Instance extends HTMLElement,
-    Props extends ElementProps & InputBaseProps<Instance, Value>,
+    Instance extends HTMLElement & {value: RefValue},
+    Props extends ElementProps<Instance, RefValue> & InputBaseProps<Instance, RefValue>,
     Value extends InputValue = InputValue,
+    RefValue extends InputRefValue = Value,
 >(
     {
         Component,
@@ -82,7 +93,7 @@ export const ValidatedInput = React.forwardRef(function ValidatedInput<
         // defaultValue,
         // defaultChecked,
         ...props
-    }: InputProps<Instance, Props, Value>,
+    }: InputProps<Instance, Props, Value, RefValue>,
     ref: React.Ref<Instance & InputRef>
 ) {
     const {
@@ -93,27 +104,53 @@ export const ValidatedInput = React.forwardRef(function ValidatedInput<
         defaultChecked,
         ...props2
     //@ts-expect-error: it should be `OuterProps` because `InputProps = {Component, rules, settings} & OuterProps`
-    } = props as OuterProps<Props>;
+    } = props as OuterProps<Props, Value>;
 
-    const [Input, option] = useState(() => {
+    const state = useState(() => {
         const option: ValidationOption<Props, any> = {
             ...settings,
             name,
             rules,
         };
-        return [withValidation(Component, option), option];
+        return {
+            Input: withValidation(Component, option),
+            option,
+            ref: null as (Instance & InputRef | null)
+        };
     });
-    option.rules = rules;
-    const [val, setVal] = React.useState<Value | undefined>(value);
+    state.option.rules = rules;
+    const [val, setVal] = React.useState<RefValue | Value | undefined>(value);
 
     React.useEffect(() => {
         setVal(value);
     }, [value]);
 
+    React.useEffect(() => {
+        if (state.ref && (state.ref as any).type != 'file') {
+            /**
+             * To avoid inconsistency the value of state variable `val` and the actual value of input.
+             * It happens when an invalid value is set to `value` prop. For example, when
+             *   + an invalid date string is assigned to `<input type='date' />`
+             *   + a value is assigned to `<select>` but no matching child `<option>` with the value.
+             * In those cases, the input will have an empty string value but state variable `val` still
+             * has the invalid value. It will cause the `required` rule has no effect.
+             */
+            const refVal = state.ref.value;
+            let isEqual = arrayEqual(
+                Array.isArray(val) ? val : [val],
+                Array.isArray(refVal) ? refVal : [refVal]
+            );
+            if (!isEqual) setVal(refVal);
+        }
+    }, [val]);
+
     //@ts-expect-error
-    return <Input
+    return <state.Input
         {...props2}
-        ref={ref}
+        ref={_ref => {
+            state.ref = _ref;
+            setRef(ref, _ref);
+        }}
         name={name}
         value={val ?? emptyString} /* avoids `undefined` to make the input component controlled */
         onChange={ev => {
@@ -121,4 +158,17 @@ export const ValidatedInput = React.forwardRef(function ValidatedInput<
             if (onChange) onChange(ev);
         }}
     />;
-});
+}) as (
+    /**
+     * Needs to cast to a Function Component so that the generic type parameters (`Instance`, `Props` and `Value`)
+     * have the effect. If not casted, the generic type parmeters are always considered as their base type.
+     */
+    <
+        Instance extends HTMLElement & {value: RefValue},
+        Props extends ElementProps<Instance, RefValue> & InputBaseProps<Instance, RefValue>,
+        Value extends InputValue = InputValue,
+        RefValue extends InputRefValue = Value,
+    >(
+        props: InputProps<Instance, Props, Value, RefValue> & React.RefAttributes<Instance & InputRef>
+    ) => React.ReactNode
+);
