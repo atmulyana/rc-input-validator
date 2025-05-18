@@ -78,8 +78,7 @@ Now, we talk about the conditions in which you may prefer `rc-input-validator`
   On Gecko browser, `minLength` is evaluated first and then `pattern`. On Webkit browser,
   the first is `pattern`. All upto the browser, which rule is evaluated first. By using
   `rc-input-validator`, we can set which rule is evaluated first. It's set by the 
-  [`priority`](#user-content-validationrule_property-priority) property and the order in
-  `rules` array.
+  [`priority`](#validationrule_property-priority) property and the order in `rules` array.
 - We cannot set a language other than English for the error messages. Perhaps,
   `setCustomValidity` may help.
 - `rc-input-validator` offers more advanced validation rules, even you can create your own
@@ -160,8 +159,8 @@ In this example, you may concern to `withValidation` and `ValidationContext` mos
 you may have concluded that `withValidation` is to specify the validation rules for the input
 and `ValidationContext` is to validate all inputs inside it. Actually, each input can be
 validated individually and doesn't need to be put inside `ValidationContext` (see detailly
-[here](#user-content-withvalidation_method-validate)). `ValidationContext` exists to validate
-many inputs at once.
+[here](#withvalidation_method-validate)). `ValidationContext` exists to validate many inputs
+at once.
 
 ### React Web App <a name="brief_example-web"></a>
 ```javascript
@@ -192,7 +191,7 @@ React web app looks more simple. There are `Form` and `Input` element. `Input` i
 of `withValidation` in React Native app. It extends the original `input` elenent. It adds
 `rules` props to it. `Form` extends the original `form` element. It wraps `ValidationContext`
 that should be placed next to `form` element. For detail explaination, please read
-[`Form`](#user-content-form) and [`Input`](#user-content-web_input) section.
+[`Form`](#form) and [`Input`](#web_input) section.
 
 
 # **API Reference**
@@ -281,19 +280,19 @@ The more complete list below shows the modules and the objects exported from the
 > For React Native, it's imported from `"rc-input-validator/native"`   
 > For React web, it's imported from `"rc-input-validator/web"`
 
-This element can validate all contained [`Input`, `TextArea`, `Select`](#user-content-web_input)
-or inputs that have been set by [`withValidation`](#user-content-withvalidation). Also, it can
-clear the validation status of those inputs.
+This element can validate all contained [`Input`, `TextArea`, `Select`](#web_input) or inputs
+that have been set by [`withValidation`](#withvalidation). Also, it can clear the validation
+status of those inputs.
 
-> For web app, you may prefer [`Form`](#user-content-form)
+> For web app, you may prefer [`Form`](#form)
 
 <a name="validationcontext-properties"></a>Some props that can be set for this element are:
 
 - `asyncFailMessage` <a name="validationcontext-asyncfailmessage"></a>  
   **Type:** enum: `AsyncFailMessage { Default, CaughtError }`  
-  When executing [`validateAsync`](#user-content-withvalidation_method-validateasync) method,
-  if it happens an error, this prop specify which error message should be displayed. By
-  default, the displayed message is "cannot validate". But, if the prop value is
+  When executing [`validateAsync`](#withvalidation_method-validateasync) method, if it happens
+  an error, this prop specify which error message should be displayed. By default, the
+  displayed message is "cannot validate". But, if the prop value is
   `AsyncFailMessage.CaughtError` then the displayed message is taken from the message of the
   thrown error.  
   **Default:** `AsyncFailMessage.Default`
@@ -308,9 +307,9 @@ clear the validation status of those inputs.
   **Type:** `React.ComponentType<{style?: StyleProp, children?: React.ReactNode}>`  
   To make the input and the error message sticks together, both of them are contained inside a
   container element. This `Container` is to specify the container component. For web app, you
-  may need [`getStyleProps`](#user-content-function-getStyleProps) to translate from
-  `StyleProp` to `className` and `style` prop so that can be applied to the HTML element
-  (Please read this [section](#user-content-style_handling-web) for additional information).
+  may need [`getStyleProps`](#function-getStyleProps) to translate from `StyleProp` to
+  `className` and `style` prop so that can be applied to the HTML element (Please read this
+  [section](#style_handling-web) for additional information).
   
   If you feel this `Container` is unhandy because you use a CSS framework that can take care
   the layout, you can remove the `Container` element by following the example below:
@@ -325,8 +324,8 @@ clear the validation status of those inputs.
     </ValidationContext>
   ```
   Just need to note: the error message is placed after the input element. Also, if there is an
-  icon element yielded by [`setStatusStyle`](#user-content-withvalidation-setstatusstyle), it
-  will be placed between the input and the error message.   
+  icon element yielded by [`setStatusStyle`](#withvalidation-setstatusstyle), it will be
+  placed between the input and the error message.   
   **Default:** For React Native, it's `View`. For web, it's a component which renders `div`.
 
 - `ErrorText` <a name="validationcontext-errortext"></a>  
@@ -341,17 +340,16 @@ clear the validation status of those inputs.
   }>
   ```
   It's the component that displays the error message. For web app, you may need
-  [`getStyleProps`](#user-content-function-getStyleProps) to translate from `style` prop of
-  this component to HTML `className` and `style` prop (Please read this
-  [section](#user-content-style_handling-web) for additional information).  
+  [`getStyleProps`](#function-getStyleProps) to translate from `style` prop of this component
+  to HTML `className` and `style` prop (Please read this [section](#style_handling-web) for
+  additional information).  
   **Default:** For web, it's a component which renders `span`. `Text` for React Native.   
   It seems no other option in React Native. All static texts must be contained in `Text`
   element. But perhaps, you want to give some decorators to the error message, you can create
   a custom component and benefit this `ErrorText` prop.
 
 - `errorTextStyle` <a name="validationcontext-errortextstyle"></a>   
-  **Type:** the same as `style` prop. Please read
-  [Style Handling](#user-content-style_handling).   
+  **Type:** the same as `style` prop. Please read [Style Handling](#style_handling).   
   The style for the error message when the input is invalid.  
   **Default:** sets red color to the text
 
@@ -362,39 +360,38 @@ clear the validation status of those inputs.
   **Default:** `false`
 
 - `inputErrorStyle` <a name="validationcontext-inputerrorstyle"></a>  
-  **Type:** the same as `style` prop. Please read
-  [Style Handling](#user-content-style_handling).   
+  **Type:** the same as `style` prop. Please read [Style Handling](#style_handling).   
   The style for the input when the input is invalid.  
   **Default:** sets red color to the border and text
 
 - `lang` <a name="validationcontext-lang"></a>  
   **Type:** `function(string): string`  
   This function is useful for the app whose multi language. This function is to translate the
-  error messages which are in english to the active language. Read
-  [this section](#user-content-messages) to inquire what messages need to translate.  
+  error messages which are in english to the active language. Read [this section](#messages)
+  to inquire what messages need to translate.  
   **Default:** `s => s` (It means no translation)
 
 #### <a name="validationcontext_members"></a>Methods and property of `ValidationContext` reference (the object that we get from `ref` prop):
 - `clearValidation` <a name="validationcontext_method-clearvalidation"></a>   
-  It executes [`clearValidation`](#user-content-withvalidation_method-clearvalidation) method
-  of all contained inputs to clear the validation status of all contained inputs.
+  It executes [`clearValidation`](#withvalidation_method-clearvalidation) method of all
+  contained inputs to clear the validation status of all contained inputs.
 
-- `isValid` is the property to check the validity status of all inputs inside the context. If
-  there is an invalid input, this property  will have `false` value. Otherwise it's `true`.
-  The value of this property is trusted after calling
-  [`validate`](#user-content-validationcontext_method-validate) or
-  [`validateAsync`](#user-content-validationcontext_method-validateasync).
+- `isValid`   
+  is the property to check the validity status of all inputs inside the context. If there is
+  an invalid input, this property  will have `false` value. Otherwise it's `true`. The value
+  of this property is trusted after calling [`validate`](#validationcontext_method-validate)
+  or [`validateAsync`](#validationcontext_method-validateasync).
 
 - `getErrorMessage(name)`<a name="validationcontext_method-geterrormessage"></a>  
   returns the error message that is being displayed for the input whose the
-  [name](#user-content-withvalidation-name) specified by `name` parameter and inside the
-  current `ValidationContext`. It returns an empty string if no error message displayed for
-  that input. It returns `undefined` if no input whose such `name`.
+  [name](#withvalidation-name) specified by `name` parameter and inside the current
+  `ValidationContext`. It returns an empty string if no error message displayed for that input.
+  It returns `undefined` if no input whose such `name`.
 
 - `getInput(name)`<a name="validationcontext_method-getinput"></a>  
-  returns the reference of the input whose the [name](#user-content-withvalidation-name)
-  specified by `name` parameter and inside the current `ValidationContext`. It returns
-  `undefined` if no input whose such `name`.
+  returns the reference of the input whose the [name](#withvalidation-name) specified by
+  `name` parameter and inside the current `ValidationContext`. It returns `undefined` if no
+  input whose such `name`.
 
 - `refreshMessage` <a name="validationcontext_method-refreshMessage"></a>   
   For a multi languange app, this method is useful to update the language of the error
@@ -403,21 +400,20 @@ clear the validation status of those inputs.
   be gone.
 
 - `setErrorMessage(name, message)`<a name="validationcontext_method-seterrormessage"></a>   
-  This method is to set the error message for an input whose the
-  [name](#user-content-withvalidation-name) specified by `name` parameter. `message` parameter
-  is the error message to show. The input must be inside the current `ValidationContext`. This
-  method is useful when dealing with
-  [server-side validation](#user-content-server-side_validation).
+  This method is to set the error message for an input whose the [name](#withvalidation-name)
+  specified by `name` parameter. `message` parameter is the error message to show. The input
+  must be inside the current `ValidationContext`. This method is useful when dealing with
+  [server-side validation](#server-side_validation).
 
 - `validate` <a name="validationcontext_method-validate"></a>   
-  It executes [`validate`](#user-content-withvalidation_method-validate) method of all
-  contained inputs to validate all contained inputs. This method returns `false` if any
-  invalid input and returns `true` otherwise.
+  It executes [`validate`](#withvalidation_method-validate) method of all contained inputs to
+  validate all contained inputs. This method returns `false` if any invalid input and returns
+  `true` otherwise.
   
 - `validateAsync` <a name="validationcontext_method-validateasync"></a>   
-  It executes [`validateAsync`](#user-content-withvalidation_method-validateasync) method of
-  all contained inputs to validate them. This method returns a `Promise` object that will
-  resolve to `false` if any invalid input or `true` if otherwise.
+  It executes [`validateAsync`](#withvalidation_method-validateasync) method of all contained
+  inputs to validate them. This method returns a `Promise` object that will resolve to `false`
+  if any invalid input or `true` if otherwise.
 
 ### `Form` <a name="form"></a>
 In web app, `ValidationContext` should be placed next to `form` element to cover all inputs
@@ -433,105 +429,97 @@ will be cancelled.
 always disabled because `rc-input-validator` takes in charge now. Beside `form` props, there
 is an additional prop:
 - `contextProps` is an object containing
-  [`ValidationContext` props](#user-content-validationcontext-properties). This object will be
-  delegated as the props of the wrapped `ValidationContext`.
+  [`ValidationContext` props](#validationcontext-properties). This object will be delegated as
+  the props of the wrapped `ValidationContext`.
 
 #### Methods and properties
 `Form` component has all members of
-[`ValidationContext`](#user-content-validationcontext_members) and also all members of 
+[`ValidationContext`](#validationcontext_members) and also all members of 
 [`form`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement).
 
 
 ## Input Component <a name="input"></a>
 An input that will be validated must be prepared, mainly, it must apply some validation rules.
 An input can be validated individually or in a group. To validate a group of inputs, they must
-be put in a [`ValidationContext`](#user-content-validationcontext).
+be put in a [`ValidationContext`](#validationcontext).
 
-For React Native app, an input is prepared by [`withValidation`](#user-content-withvalidation).
-For web app, there are some [components](#user-content-web_input) that mimic the HTML input
-elements. Technically, they prepare the represented HTML input element when mounted (prepared
-just once, not every render/update) so that the input can be validated.
+For React Native app, an input is prepared by [`withValidation`](#withvalidation). For web app,
+there are some [components](#web_input) that mimic the HTML input elements. Technically, they
+prepare the represented HTML input element when mounted (prepared just once, not every
+render/update) so that the input can be validated.
 
 ### Input validation options/settings <a name="withvalidation-option-properties"></a> 
 To prepare an input, there are some option properties that can be set to determine the
 behavior of validation. For React Native, these option properties are assigned to the second
-parameter of [`withValidation`](#user-content-withvalidation) function. For web, these
-validation options are assigned to [`settings`](#user-content-web_input-settings) prop of the
-input.
+parameter of [`withValidation`](#withvalidation) function. For web, these validation options
+are assigned to [`settings`](#web_input-settings) prop of the input.
 
 The list of input validation option properties:
 - `asyncFailMessage` <a name="withvalidation-asyncfailmessage"></a>   
   **Type:** enum `AsyncFailMessage { Default, CaughtError }`  
   The purpose of this option is the same as
-  [`asyncFailMessage`](#user-content-validationcontext-asyncfailmessage) for
-  `ValidationContext`. If specified and inside a `ValidationContext`, it will override the
-  specified one for `ValidationContext`.
+  [`asyncFailMessage`](#validationcontext-asyncfailmessage) for `ValidationContext`. If
+  specified and inside a `ValidationContext`, it will override the specified one for
+  `ValidationContext`.
 
 - `auto` <a name="withvalidation-auto"></a>  
   **Type:** `boolean`  
   If `true` then the input will be validated automatically when the user types/changes the
   input value. If specified and inside a `ValidationContext`, it will override the specified
-  [`auto`](#user-content-validationcontext-auto) for `ValidationContext`. This option is
-  ignored (cannot use auto validation) when you set one or more
-  [asynchronous rule](#user-content-validationruleasync) for
-  [`rules`](#user-content-withvalidation-rules).
+  [`auto`](#validationcontext-auto) for `ValidationContext`. This option is ignored (cannot
+  use auto validation) when you set one or more [asynchronous rule](#validationruleasync) for
+  [`rules`](#withvalidation-rules).
 
 - `Container` <a name="withvalidation-container"></a>  
-  It's the same as [`Container`](#user-content-validationcontext-container) prop of
-  `ValidationContext`. If specified and inside a `ValidationContext`, it will override the
-  specified `Container` for `ValidationContext`.
+  It's the same as [`Container`](#validationcontext-container) prop of `ValidationContext`. If
+  specified and inside a `ValidationContext`, it will override the specified `Container` for
+  `ValidationContext`.
 
 - `ErrorText` <a name="withvalidation-errortext"></a>  
-  It's the same as [`ErrorText`](#user-content-validationcontext-errortext) prop of
+  It's the same as [`ErrorText`](#validationcontext-errortext) prop of
   `ValidationContext`. If specified and inside a `ValidationContext`, it will override the
   specified `ErrorText` for `ValidationContext`.
 
 - `errorTextStyle` <a name="withvalidation-errortextstyle"></a>  
-  **Type:** the same as `style` prop. Please read
-  [Style Handling](#user-content-style_handling).   
+  **Type:** the same as `style` prop. Please read [Style Handling](#style_handling).   
   The style for the error message when the input is invalid. If specified, it will overwrite
-  the specified [`errorTextStyle`](#user-content-validationcontext-errortextstyle) for
-  `ValidationContext`.
+  the specified [`errorTextStyle`](#validationcontext-errortextstyle) for `ValidationContext`.
 
 - `inputErrorStyle` <a name="withvalidation-inputerrorstyle"></a>  
-  **Type:** the same as `style` prop. Please read
-  [Style Handling](#user-content-style_handling).   
+  **Type:** the same as `style` prop. Please read [Style Handling](#style_handling).   
   The style for the input when the input is invalid. It overwrites
-  [`inputErrorStyle`](#user-content-validationcontext-inputerrorstyle) of `ValidationContext`.
+  [`inputErrorStyle`](#validationcontext-inputerrorstyle) of `ValidationContext`.
 
 - `lang` <a name="withvalidation-lang"></a>  
   **Type:** `function(string): string`  
-  It's the same as [`lang`](#user-content-validationcontext-lang) prop of `ValidationContext`.
-  It's only used if the input is placed not inside `ValidationContext`. So, it won't override
-  what is specified for `ValidationContext`. 
+  It's the same as [`lang`](#validationcontext-lang) prop of `ValidationContext`. It's only
+  used if the input is placed not inside `ValidationContext`. So, it won't override what is
+  specified for `ValidationContext`. 
 
 - `setStatusStyle` <a name="withvalidation-setstatusstyle"></a>  
   **Type:** `function(props, style, context): React.ReactNode`  
-  This function is called when executing
-  [`validate`](#user-content-withvalidation_method-validate). This function should change
-  the input style to reflect the validation status (valid/invalid). This function also is
-  executed in every render because the style is reverted to normal style by
-  [`setStyle`](#user-content-withvalidation-setstyle) function. In which condition the
-  function is executed, you can check the second parameter.  
+  This function is called when executing [`validate`](#withvalidation_method-validate). This
+  function should change the input style to reflect the validation status (valid/invalid).
+  This function also is executed in every render because the style is reverted to normal style
+  by [`setStyle`](#withvalidation-setstyle) function. In which condition the function is
+  executed, you can check the second parameter.  
   **Parameters:**
   + `props` is the props of input element. The prop you should care about is that which holds
     style value for the input, usually named `style`.
   + `style` is the style value that should be assigned to the input style prop. When invalid,
     this parameter is an array of two entries, the first is
-    [`inputErrorStyle`](#user-content-validationcontext-inputerrorstyle) of
-    `ValidationContext` and the second is
-    [`inputErrorStyle`](#user-content-withvalidation-inputerrorstyle) option. You may ignore
-    this value if you have your own way to set the style.  
+    [`inputErrorStyle`](#validationcontext-inputerrorstyle) of `ValidationContext` and the
+    second is [`inputErrorStyle`](#withvalidation-inputerrorstyle) option. You may ignore this
+    value if you have your own way to set the style.  
       
     When the input is valid, this parameter has the falsy value. There are three possibilities
     of this falsy value:
-    * `null` if valid when executing
-      [`validate`](#user-content-withvalidation_method-validate). You may set a success style
-      to the input such as decorating it with green border.
+    * `null` if valid when executing [`validate`](#withvalidation_method-validate). You may
+      set a success style to the input such as decorating it with green border.
     * `undefined` if when executing
-      [`clearValidation`](#user-content-withvalidation_method-clearvalidation). Because of
-      being cleared, you should not set any status style (valid/invalid). The style should be
-      reverted to normal.
+      [`clearValidation`](#withvalidation_method-clearvalidation). Because of being cleared,
+      you should not set any status style (valid/invalid). The style should be reverted to
+      normal.
     * `false` if when rendering process
   
     The better comprehension may you get from this
@@ -562,11 +550,11 @@ The list of input validation option properties:
   **Default:**  
   A function that will set the style based on the second parameter (`style` parameter) when
   invalid and set the style to be `context.normalStyle` when valid. To set the style, it calls
-  [`setStyle`](#user-content-withvalidation-setstyle) without the third parameter.
+  [`setStyle`](#withvalidation-setstyle) without the third parameter.
 
 Beside the properties above, below are some properties which are only available for
-[`withValidation`](#user-content-withvalidation) (there is a note for each property why it
-doesn't exist for web input):
+[`withValidation`](#withvalidation) (there is a note for each property why it doesn't exist
+for web input):
 - `getStyle` <a name="withvalidation-getstyle"></a>  
   **Type:** `function(props): StyleProp`  
   This function is to get the style specified for the input. The function will be given the
@@ -613,35 +601,33 @@ doesn't exist for web input):
 - `name` <a name="withvalidation-name"></a>   
   **Type:** `string`  
   The name for the input. It's useful if you want to show the name in the error message.
-  Please read [Messages](#user-content-messages) section and
-  [`str`](#user-content-function-str) function for more information. It's also used by some
-  [methods](#user-content-validationcontext_members) of `ValidationContext`.
+  Please read [Messages](#messages) section and [`str`](#function-str) function for more
+  information. It's also used by some [methods](#validationcontext_members) of
+  `ValidationContext`.
   > For web inputs, the name is determined by `name` prop of the input
 
 - `rules` <a name="withvalidation-rules"></a>   
-  **Type:** [rule](#user-content-rule) object or array of [rule](#user-content-rule) objects   
-  It's the validation [rules](#user-content-rule) of how the input to be validated. You must
-  specify it. If not, the input component will be unmodified (won't be validated).
+  **Type:** [rule](#rule) object or array of [rule](#rule) objects   
+  It's the validation [rules](#rule) of how the input to be validated. You must specify it. If
+  not, the input component will be unmodified (won't be validated).
   > For web inputs, this option property is replaced by
-  > [`rules`](#user-content-web_input-rules) prop
+  > [`rules`](#web_input-rules) prop
 
 - `setStyle` <a name="withvalidation-setstyle"></a>  
   **Type:** `function(props, style?: StyleProp | Array<StyleProp | undefined>, containerStyle?: {style?: StyleProp})`  
   This function is to set the style for the input (and/or its
-  [`Container`](#user-content-withvalidation-container)). This function must be defined if the
-  input style prop is named other than `style`. Beside that, this function may be a corrective
-  action to fix the style because of how this package prepares the style (please read this
-  [`section`](#user-content-style_handling-native) for more information).  
-  **NOTE:** It's not the opposite of [`getStyle`](#user-content-withvalidation-setstyle) which
-  expects the composite style of the input element and its
-  [`Container`](#user-content-withvalidation-container). Whereas `setStyle`, on other hand,
-  sets the style to the input directly.
+  [`Container`](#withvalidation-container)). This function must be defined if the input style
+  prop is named other than `style`. Beside that, this function may be a corrective action to
+  fix the style because of how this package prepares the style (please read this
+  [`section`](#style_handling-native) for more information).  
+  **NOTE:** It's not the opposite of [`getStyle`](#withvalidation-setstyle) which expects the
+  composite style of the input element and its [`Container`](#withvalidation-container).
+  Whereas `setStyle`, on other hand, sets the style to the input directly.
 
   The first parameter is the input props. The second one is the style that should be applied
   to the input. The third parameter is useful if you want to modify the style for the
-  [`Container`](#user-content-withvalidation-container) element. Because `setStyle` is invoked
-  in every render, just make sure it won't mess up the layout/appearance when executed more
-  than once.
+  [`Container`](#withvalidation-container) element. Because `setStyle` is invoked in every
+  render, just make sure it won't mess up the layout/appearance when executed more than once.
 
   **Default:** `(props, style) => props.style = style`   
   > For web, it's always `(props, style) => Object.assign(props, getStyleProps(style))`
@@ -649,15 +635,14 @@ doesn't exist for web input):
 ### `withValidation` <a name="withvalidation"></a>
 This function is to create a *higher-order component* that wraps an input component so that it
 can apply some validation rules and also some attributes needed to define the behavior. You
-can see in the [example](#user-content-brief_example-native) above that this function takes
-two parameters. The first parameter is the function/class component that will be validated.
+can see in the [example](#brief_example-native) above that this function takes two parameters.
+The first parameter is the function/class component that will be validated.
 
 The second parameter is the option object. The object has some
-[properties](#user-content-withvalidation-option-properties) which specify validation rules
-and the other attributes. The only property you must specify is `rules`. The other properties
-are optional. If you only need to set the validation rule(s) for the input, the second
-parameter can be a [rule](#user-content-rule) object or an array of [rule](#user-content-rule)
-objects.
+[properties](#withvalidation-option-properties) which specify validation rules and the other
+attributes. The only property you must specify is `rules`. The other properties are optional.
+If you only need to set the validation rule(s) for the input, the second parameter can be a
+[rule](#rule) object or an array of [rule](#rule) objects.
 
 This function is available for React Native app.
 
@@ -672,17 +657,17 @@ inputs. However, there are some differents:
   to `value` prop (it may be changed later without changing `value` prop). However, we may
   still define a state for `value` prop and its appropriate `onChange` handler.
 - `className` is dropped. CSS class name(s) is also assigned to `style` prop (Please read this
-  [section](#user-content-style_handling-web) for additional information). It's because how
-  `rc-input-validator` works (related to [`getStyle`](#user-content-withvalidation-getstyle)).
+  [section](#style_handling-web) for additional information). It's because how
+  `rc-input-validator` works (related to [`getStyle`](#withvalidation-getstyle)).
 - New prop: `rules` <a name="web_input-rules"></a> defines the validation rules for the input.
-  It can be a [rule](#user-content-rule) object or an array of [rule](#user-content-rule)
-  objects. Even if this prop can be updated in every render, but usually it doesn't change. If
-  it never changes and there is a [rule](#user-content-rule) object needs quite heavy process
-  to create, it's better to create the rule object outside the function component or `render`
-  method of class component so that it's not recreated in every render.
+  It can be a [rule](#rule) object or an array of [rule](#rule) objects. Even if this prop can
+  be updated in every render, but usually it doesn't change. If it never changes and there is
+  a [rule](#rule) object needs quite heavy process to create, it's better to create the rule
+  object outside the function component or `render` method of class component so that it's not
+  recreated in every render.
 - New prop: `settings` <a name="web_input-settings"></a> is the validation option properties
-  as explained in the above [section](#user-content-withvalidation-option-properties). This
-  prop is only read at mounting and in the next renders, this prop is ignored.
+  as explained in the above [section](#withvalidation-option-properties). This prop is only
+  read at mounting and in the next renders, this prop is ignored.
 
 The available input components:
 #### `Input`, `Select` and `TextArea` <a name="standard_input"></a>
@@ -709,16 +694,15 @@ slight number of options. This conponent has the following props:
 - `options` <a name="checkboxes-options"></a> is an array of object
   `{value: string, label?: string}` or a `string` array. `value` of an option is the `value`
   of the checkbox and its `label` is for the checkbox' label. If `label` is not defined then
-  it's the same as `value`. If `options` is `string` array then it means all `value` and its
+  it's the same as `value`. If `options` is a `string` array then it means all `value` and its
   `label` are the same.  
-  [`value`](#user-content-checkboxes-value) will be compared to `value` of each option to
-  determine whether the corresponding checkbox is checked or not. Remember, this component
-  is internally controlled, so, the selected checkbox(es) doesn't stick to
-  [`value`](#user-content-checkboxes-value) prop and may be changed later without changing
-  `value` prop. Still, you may define a state for `value` prop and its appropriate `onChange`
-  handler.  
+  [`value`](#checkboxes-value) will be compared to `value` of each option to determine whether
+  the corresponding checkbox is checked or not. Remember, this component is internally
+  controlled, so, the selected checkbox(es) doesn't stick to [`value`](#checkboxes-value) prop
+  and may be changed later without changing `value` prop. Still, you may define a state for
+  `value` prop and its appropriate `onChange` handler.  
   `options` is a required props (must be set).
-- Other common HTML element props and validation input [props]((#user-content-web_input)).
+- Other common HTML element props and validation input [props]((#web_input)).
 
 Available `CheckBoxes` method:
 - `focus` <a name="checkboxes-focus"></a> is to give focus on the first checkbox.
@@ -738,8 +722,8 @@ with 'Music' and 'Movie' are checked.
 `RadioButtons` is a group of some `<Input type='radio' />` whose the same `name` prop. In fact,
 radio input should be in a group to make a choice. Sometimes, this input is preferred
 representation of `<Select>` if there are only the slight number of options. This component
-has props/method as the same as the props/method of [`CheckBoxes`](#user-content-checkboxes)
-except `value` data type is always a `string`.
+has props/method as the same as the props/method of [`CheckBoxes`](#checkboxes) except `value`
+data type is always a `string`.
 
 Example:
 ```javascript
@@ -758,11 +742,11 @@ checked.
 
 #### `ValidatedInput`
 If the above inputs are not enough, `ValidatedInput` gives you a freedom to define an input.
-Beside [`rules`](#user-content-web_input-rules) and
-[`settings`](#user-content-web_input-settings) prop, `ValidatedInput` has `Component` prop.
-The last prop is an input component. You can assign your custom input component to this prop.
-The rest props (other than `rules`, `settings` and `Component`) assigned to `ValidatedInput`
-element will be delegated to the defined input element.
+Beside [`rules`](#web_input-rules) and [`settings`](#web_input-settings) prop,
+`ValidatedInput` has `Component` prop. The last prop is an input component. You can assign
+your custom input component to this prop. The rest props (other than `rules`, `settings` and
+`Component`) assigned to `ValidatedInput` element will be delegated to the input element
+defined by `Component` prop.
 
 `Component` prop is only read at mounting. In the next renders, this prop is ignored.
 
@@ -770,9 +754,9 @@ element will be delegated to the defined input element.
 - `clearValidation` <a name="withvalidation_method-clearvalidation"></a>   
   It's to clear validation status. The error message will disappear and the input style is
   reverted to normal. After executing this method,
-  [`isValid`](#user-content-withvalidation_property-isvalid) will be reset to `true` even if
-  the input is invalid. If [`auto`](#user-content-withvalidation-auto) validation is disabled,
-  this method will be called when the user edits the input value right after the validation.
+  [`isValid`](#withvalidation_property-isvalid) will be reset to `true` even if the input is
+  invalid. If [`auto`](#withvalidation-auto) validation is disabled, this method will be
+  called when the user edits the input value right after the validation.
 
 - `getErrorMessage` <a name="withvalidation_method-getErrorMessage"></a>   
   This method returns the error message being displayed for the input. It returns an empty
@@ -781,24 +765,24 @@ element will be delegated to the defined input element.
 - `isValid` <a name="withvalidation_property-isvalid"></a>  
   It shows the validity status of input. It's `true` if valid and `false` if invalid. The
   value of this property is trusted after calling
-  [`validate`](#user-content-withvalidation_method-validate) or
-  [`validateAsync`](#user-content-withvalidation_method-validateasync).
+  [`validate`](#withvalidation_method-validate) or
+  [`validateAsync`](#withvalidation_method-validateasync).
 
 - `name` <a name="withvalidation_property-name"></a>  
   It's the name of input. The value of this property is the same as that specified for
-  [`name`](#user-content-withvalidation-name) option or `name` prop of web input.
+  [`name`](#withvalidation-name) option or `name` prop of web input.
 
 - `setErrorMessage(message)` <a name="withvalidation_method-seterrormessage"></a>  
   This method can set the error message for the input without calling
-  [`validate`](#user-content-withvalidation_method-validate) or
-  [`validateAsync`](#user-content-withvalidation_method-validateasync). It won't validate any
-  [rule](#user-content-withvalidation-rules) that has been applied to the input. By calling
-  this method, the input status becomes invalid
-  ([`isValid`](#user-content-withvalidation_property-isvalid) property is `false`).
+  [`validate`](#withvalidation_method-validate) or
+  [`validateAsync`](#withvalidation_method-validateasync). It won't validate any
+  [rule](#withvalidation-rules) that has been applied to the input. By calling this method,
+  the input status becomes invalid ([`isValid`](#withvalidation_property-isvalid) property is
+  `false`).
 
   For example, we need to validate the input on the server because we must read the database
   to make sure the inputed user name is unique. (NOTE: The example below should be solved
-  using [asynchronous validation](#user-content-asynchronous_validation) interfaces).
+  using [asynchronous validation](#asynchronous_validation) interfaces).
   ```javascript
   const validateAsync = () => new Promise((resolve, reject) => {
       fetch(
@@ -841,26 +825,25 @@ element will be delegated to the defined input element.
   />
   ``` 
 
-  Need to remember that [`rules`](#user-content-withvalidation-rules) option is required. If
+  Need to remember that [`rules`](#withvalidation-rules) option is required. If
   you want to use `setErrorMessage` method but doesn't need to apply any validation rule, you
-  can use [`alwaysValid`](#user-content-alwaysvalid) rule.
+  can use [`alwaysValid`](#alwaysvalid) rule.
 
 - `validate` <a name="withvalidation_method-validate"></a>  
-  This method is to validate the input based on the specified
-  [rules](#user-content-withvalidation-rules). Below is the example how to validate input when
-  it's lost focus. 
+  This method is to validate the input based on the specified [rules](#withvalidation-rules).
+  Below is the example how to validate input when it's lost focus. 
 
         <NameTextInput ref={nameInput} onBlur={() => nameInput.current?.validate()} onChangeText={setName} value={name} />
 
   This method returns `true` if input value is valid or `false` if invalid. This method will
   throw an error if there is a
-  [rule object which does the asynchronous validation](#user-content-validationruleasync).
+  [rule object which does the asynchronous validation](#validationruleasync).
 
 - `validateAsync` <a name="withvalidation_method-validateasync"></a>  
-  As [`validate`](#user-content-withvalidation_method-validate), this method is also to
-  validate the input based on the specified [rules](#user-content-withvalidation-rules) but
-  the process is executed in asynchronous mode. This method returns a `Promise` object that
-  will resolve to `true` if the input value is valid or `false` if otherwise.
+  As [`validate`](#withvalidation_method-validate), this method is also to validate the input
+  based on the specified [rules](#withvalidation-rules) but the process is executed in
+  asynchronous mode. This method returns a `Promise` object that will resolve to `true` if the
+  input value is valid or `false` if otherwise.
 
 If the original input has the same methods and property as listed above, they will be
 overriden. If you want to access the overridden method/property of original input, follow the
@@ -883,22 +866,22 @@ example below:
 
 `Validation` component can be used to validate a value without wrapping an input component.
 It has some properties which are the same as
-`withValidion` [option](#user-content-withvalidation-option-properties). These properties are
-`auto`, `errorTextStyle`, `lang` and `rules`. The purpose of these properties are exactly the
-same as `withValidion` option's. These properties are *write-once*. They are only set when the
+`withValidion` [option](#withvalidation-option-properties). These properties are `auto`,
+`errorTextStyle`, `lang` and `rules`. The purpose of these properties are exactly the same as
+`withValidion` option's. These properties are *write-once*. They are only set when the
 component is mounted. If you change the properties in the next render, it won't have effect.
 
 Beside the properties mentioned before, there are two more properties:
-- `style` is the style for [`Container`](#user-content-withvalidation-container) component
-  rendered by `Validation` component. See [Style Handling](#user-content-style_handling)
-  section, which style attributes that have effect.
+- `style` is the style for [`Container`](#withvalidation-container) component rendered by
+  `Validation` component. See [Style Handling](#style_handling) section, which style
+  attributes that have effect.
 - `value` is the validated value. It can be an actual value or a function. If it's a function
   then the function will be executed to get the real value. The fuction is useful to create a
   dynamic value.
 
 `Validation` object reference also has the same methods and property as
-[those](#user-content-withvalidation_methods_property) owned by input component reference
-resulted by `withValidation`
+[those](#withvalidation_methods_property) owned by input component reference resulted by
+`withValidation`
 
 **Example:**
 
@@ -931,20 +914,19 @@ You notice this example, the value of `Validation` is the same as the value of e
 ## Style Handling <a name="style_handling"></a>
 
 ### React Native <a name="style_handling-native"></a>
-To make the input and the error message stick together,
-[`withValidation`](#user-content-withvalidation) wraps them into a
-[`Container`](#user-content-withvalidation-container) component. However, we want the
-component yielded by [`withValidation`](#user-content-withvalidation) behaves the same as the
-original input except we add the validation feature to it. All properties for the input must
-apply for the new component. Every property seems ok, we can just distribute them to the
-wrapped input. Except one property we think it has a problem. That is the property which
-defines the style for the input. Because now, the input is inside the `Container`. We must
-modify the style property if we still want the same style as if the input is unwrapped. The
-big concern is all style attributes dealing with layout. That is how the parent of input
-arranges the area for input, before. Because now, the parent must arrange the `Container`.
-Therefore, the component yielded by [`withValidation`](#user-content-withvalidation) will move
-all style attributes dealing with layout to be the style attributes of `Container`. Then, the
-input must be set to fill the area of `Container`.
+To make the input and the error message stick together, [`withValidation`](#withvalidation)
+wraps them into a [`Container`](#withvalidation-container) component. However, we want the
+component yielded by [`withValidation`](#withvalidation) behaves the same as the original
+input except we add the validation feature to it. All properties for the input must apply for
+the new component. Every property seems ok, we can just distribute them to the wrapped input.
+Except one property we think it has a problem. That is the property which defines the style
+for the input. Because now, the input is inside the `Container`. We must modify the style
+property if we still want the same style as if the input is unwrapped. The big concern is all
+style attributes dealing with layout. That is how the parent of input arranges the area for
+input, before. Because now, the parent must arrange the `Container`. Therefore, the component
+yielded by [`withValidation`](#withvalidation) will move all style attributes dealing with
+layout to be the style attributes of `Container`. Then, the input must be set to fill the area
+of `Container`.
 
 We know, the value for `style` prop is not always a plain object or a falsy value but it can
 be a recursive array. Therefore, the first step is to flatten it if it's an array. Fortunately,
@@ -986,8 +968,8 @@ the `Container` has one of attributes: `height` (percentage), `flex` or `flexBas
 the input has `height` (number) attribute, the `flex` attribute won't be set.
 
 There are two handlers you may define in `withValidtion` option which involves in this
-modification of style. Those are [`getStyle`](#user-content-withvalidation-getstyle) and
-[`setStyle`](#user-content-withvalidation-setstyle).
+modification of style. Those are [`getStyle`](#withvalidation-getstyle) and
+[`setStyle`](#withvalidation-setstyle).
 
 There is still a possibility that the layout will mess up when the error message comes up.
 That possibility happens, especially when the parent of input (that becomes the parent of the
@@ -1049,7 +1031,7 @@ to support web app that is the style handling. The style in web, which is called
 (Cascading Style Sheet) is very complicated. There are many *shorthand* CSS properties. A
 *shorthand* CSS property represents some other specific properties. It's not simple process to
 parse. Therefore, we use the different approach for React web, the style must be explicitly
-set to the input and its [`Container`](#user-content-withvalidation-container).
+set to the input and its [`Container`](#withvalidation-container).
 
 Beside that, an element style is determined by a lot of *selectors*: tag/element name, the
 existence or the value of a prop/attribute or even by the parent/ancestor element and the
@@ -1058,8 +1040,8 @@ sibiling elements. However, the are two main props to define the style: `classNa
 
 Based on the above explanation, we make the following approach. Let's say we define
 `StyleProp` that is the data type for `style` prop of individual component (the input or its
-[`Container`](#user-content-withvalidation-container)). A validated input that is a composite
-component (the original input and its `Container`) has `style` prop whose type as follows:
+[`Container`](#withvalidation-container)). A validated input that is a composite component
+(the original input and its `Container`) has `style` prop whose type as follows:
 
     { $cover: StyleProp, $input?: StyleProp } | StyleProp
 
@@ -1072,38 +1054,34 @@ and let `Container` uses the default style. `StyleProp` itself is defined as fol
 If it's `string` then it's the CSS class name(s) (will be assigned to `className` prop of the
 underlying HTML element). If it's `CSSProperties` then it's inline style (will be assigned to
 `style` prop of underlying HTML element). If we want to set both, we use `{$class, $style}`.
-This package provides [`getStyleProps`](#user-content-function-getStyleProps) function to
-convert `StyleProp` or array of `StyleProp` to be `{className, style}` object. This function
-may be useful if you want to implement
-[`setStatusStyle`](#user-content-withvalidation-setstatusstyle) function.
+This package provides [`getStyleProps`](#function-getStyleProps) function to convert
+`StyleProp` or array of `StyleProp` to be `{className, style}` object. This function may be
+useful if you want to implement [`setStatusStyle`](#withvalidation-setstatusstyle) function.
 
 
 ## Asynchronous Validation <a name="asynchronous_validation"></a>
 In some cases, we need to execute the validation process in asynchronous mode. The prominent
 example is when we need to call back the server to check the validity of input value. May be,
 we need to check the database to ensure the input is valid or not. For making an HTTP request
-purpose, this package has provided [`httpReq`](#user-content-httpreq) rule.
+purpose, this package has provided [`httpReq`](#httpreq) rule.
 
 To make the process of validation in asynchronous mode, first thing you need is a rule object
 that can validate a value asynchronously. This package has provided some rule objects that can
 make the process asynchronously. One of them has been mentioned before, that is `httpReq`. The
-another one is [`ruleAsync`](#user-content-ruleasync). If these rule objects don't satisfy you,
-create your own rule class which inherits
-[`ValidationRuleAsync`](#user-content-validationruleasync) class.
+another one is [`ruleAsync`](#ruleasync). If these rule objects don't satisfy you, create your
+own rule class which inherits [`ValidationRuleAsync`](#validationruleasync) class.
 
 After you defines the asynchronous rule(s), as usual, set the rule(s) to
-[`rules`](#user-content-withvalidation-rules) option of
-[`withValidation`](#user-content-withvalidation) or [`rules`](#user-content-web_input-rules)
-prop of the web input. You may mix asynchronous and synchronous rules.
-[`priority`](#user-content-validationrule_property-priority) property still applies as
-appropriately (an asynchronous rule won't be examined after a synchronous rule that has lower
-priority).
+[`rules`](#withvalidation-rules) option of [`withValidation`](#withvalidation) or
+[`rules`](#web_input-rules) prop of the web input. You may mix asynchronous and synchronous
+rules. [`priority`](#validationrule_property-priority) property still applies as appropriately
+(an asynchronous rule won't be examined after a synchronous rule that has lower priority).
 
 The last step, to validate the input(s) asynchronously, you must call
-[`validateAsync`](#user-content-withvalidation_method-validateasync) method of the input
-reference or [`validateAsync`](#user-content-validationcontext_method-validateasync) method of
-the context reference. Both methods return a `Promise` object. So, if you want to get the
-validation result, you should use the following statement:
+[`validateAsync`](#withvalidation_method-validateasync) method of the input reference or
+[`validateAsync`](#validationcontext_method-validateasync) method of the context reference.
+Both methods return a `Promise` object. So, if you want to get the validation result, you
+should use the following statement:
 
     inputRef.validateAsync()
         .then(isValid => {
@@ -1125,23 +1103,22 @@ can make a request without using our app and use an invalid data. So, the server
 validation is always needed exactly as if we are not using a rich user interface application
 (like an oldish web app).
 
-Then, you may think that if we use a rule like [`httReq`](#user-content-httpreq) then the
-server-side validation has been done because the validation by this rule is examined on the
-server. Unfortunately, it's not. We must validate the inputs right before they are used by
-the corresponding business process. Clearly, the URI used by `httpReq` is different from that
-to where the data is submitted. Knowing this fact, you may think that a rule like `httReq` is
-not needed because there will be more round-trip. Yes, you are true but people always have
+Then, you may think that if we use a rule like [`httReq`](#httpreq) then the server-side
+validation has been done because the validation by this rule is examined on the server.
+Unfortunately, it's not. We must validate the inputs right before they are used by the
+corresponding business process. Clearly, the URI used by `httpReq` is different from that to
+where the data is submitted. Knowing this fact, you may think that a rule like `httReq` is not
+needed because there will be more round-trip. Yes, you are true but people always have
 different preference and there may be a situation it's needed.
 
 Now, if we agree that the server-side validation is needed then how to notify user if there
 is one or more invalid inputs. You may use an alert dialog or a Toast popup. But, it may be
 better if we show each error message below the corresponding input with hightlighting style
 like this package does in client-side validation. It's possible by the favor of
-[`setErrorMessage`](#user-content-validationcontext_method-seterrormessage) method. Follow the
-example below. In the example, if there is one or more invalid inputs, the server returns
-status code 400 (Bad Request) and the response body is a JSON data key-ed by the invalid input
-[name](#user-content-withvalidation-name)s. The value of each key is the error message for
-that input.
+[`setErrorMessage`](#validationcontext_method-seterrormessage) method. Follow the example
+below. In the example, if there is one or more invalid inputs, the server returns status code
+400 (Bad Request) and the response body is a JSON data key-ed by the invalid input
+[name](#withvalidation-name)s. The value of each key is the error message for that input.
 ```javascript
     <Button
         onPress={() => {
@@ -1213,9 +1190,9 @@ To validate an input, follow the example below:
     }
 ```
 
-[Asynchronous validation](#user-content-asynchronous_validation) is still needed in
-server-side validation, for example, if we need to connect to database to check the validity
-of input. Database connection is usually in asynchronous mode.
+[Asynchronous validation](#asynchronous_validation) is still needed in server-side validation,
+for example, if we need to connect to database to check the validity of input. Database
+connection is usually in asynchronous mode.
 
 
 ## Functions <a name="functions"></a>
@@ -1224,7 +1201,7 @@ The functions here can be imported from the package.
 
 ### `getStyleProps(...styles)` <a name="function-getStyleProps"></a>
 This function is provided by "web" module. This function converts `StyleProp` value as
-described in this [section](#user-content-style_handling-web) to be a value whose type:
+described in this [section](#style_handling-web) to be a value whose type:
 
     {className: string | undefined, style: CSSProperties | undefined}
 
@@ -1238,10 +1215,10 @@ there is the same CSS property from different parameter, the property value from
 on the right will override the one from the parameter on the left.
 
 ### `isFilled(value)` <a name="function-isFilled"></a>
-This function is used by [`required`](#user-content-required) rule to check whether a value is
-empty or not. A value is considered as empty if it is `null`, `undefined`, a string only
-contains white space(s) or an empty array. An array containing only one empty element is also
-considered empty. This funtion returns `false` if `value` is empty.
+This function is used by [`required`](#required) rule to check whether a value is empty or not.
+A value is considered as empty if it is `null`, `undefined`, a string only contains white
+space(s) or an empty array. An array containing only one empty element is also considered
+empty. This funtion returns `false` if `value` is empty.
 
 ### `str(template, valueMap)` <a name="function-str"></a>
 This function is to construct a string from a template string and a map of values. In the
@@ -1261,14 +1238,14 @@ be empty), must be a numeric value, must be minimum at a certain value etc. The 
 reponsible to check whether the input value meets the desired condition or not, to be valid.
 Mostly, one rule object is responsible to check only one condition. However, we can combine
 some rule objects so that the input value must meet some conditions to be valid. This is why
-`withValidation` [rules](#user-content-withvalidation-rules) option can be a single rule
+`withValidation` [rules](#withvalidation-rules) option can be a single rule
 object or an array of rule objects.
 
-This package has some [*built-in* rule](#user-content-builtin_rules) objects which are ready
+This package has some [*built-in* rule](#builtin_rules) objects which are ready
 to use. These rule objects are explained in the next sections. You can create your own rule
-object by creating a class that extends [`ValidationRule`](#user-content-validationrule) or
-[`ValidationRuleAsync`](#user-content-validationruleasync). Most rule objects are imported
-from `'rc-input-validator/rules'`.
+object by creating a class that extends [`ValidationRule`](#validationrule) or
+[`ValidationRuleAsync`](#validationruleasync). Most rule objects are imported from
+`'rc-input-validator/rules'`.
 
 ### `ValidationRule` <a name="validationrule"></a>
 
@@ -1284,36 +1261,33 @@ properties and methods explained here.
 
 - `isValid` <a name="validationrule_property-isvalid"></a>  
   It's `true` if valid and `false` if invalid. It's set by
-  [`validate`](#user-content-validationrule_method-validate) method. Therefore, it's trusted
-  just after calling [`validate`](#user-content-validationrule_method-validate) method.
+  [`validate`](#validationrule_method-validate) method. Therefore, it's trusted just after
+  calling [`validate`](#validationrule_method-validate) method.
 
 - `lang`  
    is a function to translate the error message to the active languange. By default, the
-   message is in english. It will be set by
-   [`validate`](#user-content-withvalidation_method-validate) method of input ref that will be
-   the same as context [`lang`](#user-content-validationcontext-lang) or
-   `widthValidation` [`lang`](#user-content-withvalidation-lang) option.
+   message is in english. It will be set by [`validate`](#withvalidation_method-validate)
+   method of input ref that will be the same as context [`lang`](#validationcontext-lang) or
+   `widthValidation` [`lang`](#withvalidation-lang) option.
 
 - `messageFunc` <a name="validationrule_property-messagefunc"></a>  
   Read-only. It's a function which returns the error message. This error message overwrites
-  the default message specified by
-  [`errorMessage`](#user-content-validationrule_property-errormessage). The parameter of the
-  function is the rule object itself. To set this property, use
-  [`setMessageFunc`](#user-content-validationrule_method-setmessagefunc) method.
+  the default message specified by [`errorMessage`](#validationrule_property-errormessage).
+  The parameter of the function is the rule object itself. To set this property, use
+  [`setMessageFunc`](#validationrule_method-setmessagefunc) method.
 
 - `name` <a name="validationrule_property-name"></a>  
-  is the name of validated input. It's set by
-  [`validate`](#user-content-withvalidation_method-validate) method of input ref which is the
-  same as `withValidation` [`name`](#user-content-withvalidation-name) option or `name` prop
-  of the web input.
+  is the name of validated input. It's set by [`validate`](#withvalidation_method-validate)
+  method of input ref which is the same as `withValidation` [`name`](#withvalidation-name)
+  option or `name` prop of the web input.
 
 - `priority` <a name="validationrule_property-priority"></a>  
   Read-only. If we specify some rules to validate the input, `priority` determines which rule
   to be examined first. `priority` has a number value. The lower value means the higher
   priority. By existence of `priority`, you don't need to bother the order in
-  [`rules`](#user-content-withvalidation-rules) array of `withValidation` option or
-  [`rules`](#user-content-web_input-rules) prop of the web input. The value of this property
-  is set by [`setPriority`](#user-content-validationrule_method-setpriority).
+  [`rules`](#withvalidation-rules) array of `withValidation` option or
+  [`rules`](#web_input-rules) prop of the web input. The value of this property is set by
+  [`setPriority`](#validationrule_method-setpriority).
 
   By default, the *built-in* rules have the priority as following (ordered based on which is
   examined first):
@@ -1325,56 +1299,54 @@ properties and methods explained here.
   + `rule`
   + `httpReq`, `ruleAsync`
 
-  If two rules have the same priority, the order in the
-  [`rules`](#user-content-withvalidation-rules) array determines which one first.
+  If two rules have the same priority, the order in the [`rules`](#withvalidation-rules) array
+  determines which one first.
 
 - `value` <a name="validationrule_property-value"></a>  
   is the input value that is validated. It's set by
-  [`validate`](#user-content-withvalidation_method-validate) method of input ref.
+  [`validate`](#withvalidation_method-validate) method of input ref.
 
 - `resultValue` <a name="validationrule_property-resultValue"></a>  
-  After calling [`validate`](#user-content-validationrule_method-validate), `resultValue` will
-  save a value with valid data type. For example, for `numeric` rule, it will save a number
-  value, not string like [`value`](#user-content-validationrule_property-value). The value of
-  this prop is the value that will be axamined by the next rule. So, the original input value
-  is only examined by the first rule.
+  After calling [`validate`](#validationrule_method-validate), `resultValue` will save a value
+  with valid data type. For example, for `numeric` rule, it will save a number value, not
+  string like [`value`](#validationrule_property-value). The value of this prop is the value
+  that will be axamined by the next rule. So, the original input value is only examined by the
+  first rule.
   
-  By default, `resultValue` is the same as
-  [`value`](#user-content-validationrule_property-value) (with the same data type).
+  By default, `resultValue` is the same as [`value`](#validationrule_property-value) (with the
+  same data type).
 
 #### Methods: <a name="validationrule_methods"></a>
 All methods returns the instance of the rule object.
 - `setErrorMessage(message)` <a name="validationrule_method-seterrormessage"></a>  
-  is to set [`messageFunc`](#user-content-validationrule_property-messagefunc) property to be
-  `() => message`. It doesn't set
-  [`errorMessage`](#user-content-validationrule_property-errormessage) directly because this
-  property internally will checks
-  [`messageFunc`](#user-content-validationrule_property-messagefunc) function whether it's
-  defined. If defined, it will invokes the funtion instead. So, `setErrorMessage` is only the
-  simpler alternative of
-  [`setMessageFunc`](#user-content-validationrule_method-setmessagefunc).
+  is to set [`messageFunc`](#validationrule_property-messagefunc) property to be
+  `() => message`. It doesn't set [`errorMessage`](#validationrule_property-errormessage)
+  directly because this property internally will checks
+  [`messageFunc`](#validationrule_property-messagefunc) function whether it's defined. If
+  defined, it will invokes the funtion instead. So, `setErrorMessage` is only the simpler
+  alternative of [`setMessageFunc`](#validationrule_method-setmessagefunc).
 
 - `setMessageFunc` <a name="validationrule_method-setmessagefunc"></a>  
-  is to set [`messageFunc`](#user-content-validationrule_property-messagefunc) property.
+  is to set [`messageFunc`](#validationrule_property-messagefunc) property.
 
 - `setName` <a name="validationrule_method-setname"></a>  
-  is to set [`name`](#user-content-validationrule_property-name) property.
+  is to set [`name`](#validationrule_property-name) property.
 
 - `setPriority` <a name="validationrule_method-setpriority"></a>  
-  is to set [`priority`](#user-content-validationrule_property-priority). You should set a
-  non-negative number.
+  is to set [`priority`](#validationrule_property-priority). You should set a non-negative
+  number.
 
 - `setValue` <a name="validationrule_method-setvalue"></a>  
-  is to set [`value`](#user-content-validationrule_property-value) property.
+  is to set [`value`](#validationrule_property-value) property.
 
 - `validate` <a name="validationrule_method-validate"></a>  
-  is to validate [`value`](#user-content-validationrule_property-value) and then set
-  [`isValid`](#user-content-validationrule_property-isvalid) based on the validity of
-  [`value`](#user-content-validationrule_property-value).
+  is to validate [`value`](#validationrule_property-value) and then set
+  [`isValid`](#validationrule_property-isvalid) based on the validity of
+  [`value`](#validationrule_property-value).
 
 You may ask why there are some `set*` method, why don't leave *read-write* property alone. It
 is to make *fluent interface* which is more convenient. For example, when you set rule for
-`withValidation` [`rules`](#user-content-withvalidation-rules) option:
+`withValidation` [`rules`](#withvalidation-rules) option:
 
     const Input = withValidation(..., {
         ...
@@ -1420,11 +1392,11 @@ export const ccNumber = new CreditCardNumber(); //`ccNumber` is more convienent 
 
 All rule objects which do validation in asynchronous mode, should inherit this class. This
 class has all methods and properties as owned by
-[`ValidationRule`](#user-content-validationrule) except the `validate` method of this class
-return a `Promise` object. For example, we have to validate a credit card number input like in
-[`ValidationRule` example](#user-content-validationrule_example). But here, we have a list of
-valid card numbers in database. So, it must make an HTTP request to ask server to validate the
-number. We change `validate` method in the example before to be:
+[`ValidationRule`](#validationrule) except the `validate` method of this class return a
+`Promise` object. For example, we have to validate a credit card number input like in
+[`ValidationRule` example](#validationrule_example). But here, we have a list of valid card
+numbers in database. So, it must make an HTTP request to ask server to validate the number.
+We change `validate` method in the example before to be:
 ```javascript
     async validate() {
         this.isValid = await fetch(
@@ -1444,8 +1416,7 @@ number. We change `validate` method in the example before to be:
 > You can import these rules from `'rc-input-validator/rules/date'`
 
 This rule is to check the input value whether it's a valid date value. The input value is a
-`string`. The [`resultValue`](#user-content-validationrule_property-resultValue) is a `Date`
-object.  
+`string`. The [`resultValue`](#validationrule_property-resultValue) is a `Date` object.  
 **Parameters:** <a name="date_parameters"></a>
 - `pattern` is the valid pattern for the input string. The pattern is explained
   [here](https://atmulyana.github.io/JsSimpleDateFormat/JsSimpleDateFormat-Manual.html#Date_and_Time_Patterns).
@@ -1457,22 +1428,20 @@ object.
 
 **Property:**
 - `valueAsDate` is to get the `Date` object which reflects the current
-  [`value`](#user-content-validationrule_property-value). It returns `null` if `value` is
-  invalid. This property doesn't execute
-  [`validate`](#user-content-validationrule_method-validate) method. Therefore, accessing this
-  property won't change [`resultValue`](#user-content-validationrule_property-resultValue).
+  [`value`](#validationrule_property-value). It returns `null` if `value` is invalid. This
+  property doesn't execute [`validate`](#validationrule_method-validate) method. Therefore,
+  accessing this property won't change [`resultValue`](#validationrule_property-resultValue).
 
 **Method:**
 - `parse(strDate)` is to parse a string value to be a `Date` object using the defined
-  [pattern](#user-content-date_parameters) for this rule. This method is useful to determine
-  the constraint for the next rule such as [`max`](#user-content-max) or
-  [`min`](#user-content-min).
+  [pattern](#date_parameters) for this rule. This method is useful to determine the constraint
+  for the next rule such as [`max`](#max) or [`min`](#min).
 
 > If you use `<input type="date" />` for the date input in web app, need to know that this
 > input will have an empty string value if the input value is invalid (not the same as the
-> displayed value). Therefore, it will be invalidated by [`required`](#user-content-required)
-> rule or if not required, the input value will be valid (because of optional). To avoid this
-> problem, follow the example below:
+> displayed value). Therefore, it will be invalidated by [`required`](#required) rule or if
+> not required, the input value will be valid (because of optional). To avoid this problem,
+> follow the example below:
 > ```
 > const rules = [new Required().setErrorMessage('Invalid date'), date(), ...];
 > function DateForm() {
@@ -1485,8 +1454,8 @@ object.
 >```
 > `Required` rule seems enough if you want only to check the date value is valid or not.
 > `date` rule is still needed if you want to check the value using more rules, such as
-> [`min`](#user-content-min) or [`max`](#user-content-max) because `date` rule will have
-> [`resultValue`](#user-content-validationrule_property-resultValue) as a `Date` object.
+> [`min`](#min) or [`max`](#max) because `date` rule will have
+> [`resultValue`](#validationrule_property-resultValue) as a `Date` object.
 
 #### `new Email()` or `email` <a name="email"></a>
 The rule for examined the input value whether it's a valid email address or not.
@@ -1500,16 +1469,14 @@ asynchronous mode.
   plain object whose one or more properties listed below (all properties are optional):
   + `data` is request data that will be sent to server. `data` can be a plain object or a
     `URLSearchParams` object. If `data` is set then the request will use POST method.
-    [`name`](#user-content-validationrule_property-name) and
-    [`value`](#user-content-validationrule_property-value) will be automatically included in
-    `data` (you doesn't need to set them in `data`).   
+    [`name`](#validationrule_property-name) and [`value`](#validationrule_property-value) will
+    be automatically included in `data` (you doesn't need to set them in `data`).   
     If `data` is not set then the request will use GET method.
-    [`name`](#user-content-validationrule_property-name) and
-    [`value`](#user-content-validationrule_property-value) will be inserted into URI string as
-    the query part. If you want to use POST method but have no data other than
-    [`name`](#user-content-validationrule_property-name) and
-    [`value`](#user-content-validationrule_property-value), set `data` as an empty object
-    (`{}`) or as `new URLSearchParams()` without setting any data.
+    [`name`](#validationrule_property-name) and [`value`](#validationrule_property-value) will
+    be inserted into URI string as the query part. If you want to use POST method but have no
+    data other than [`name`](#validationrule_property-name) and
+    [`value`](#validationrule_property-value), set `data` as an empty object (`{}`) or as
+    `new URLSearchParams()` without setting any data.
   + `headers` is a plain object contains request HTTP headers. The keys of object are the
      header names and their values are their corresponding header values. For example:
 
@@ -1551,8 +1518,8 @@ app.get('/check-validity', function(req, res) {
 #### `new Integer()` or `integer` <a name="integer"></a>
 Checks if the input value is integer or not. If the input value is a string (such as getting
 from `TextInput`) and you want it considered as number, you must also specify
-[`numeric`](#user-content-numeric) rule for the input. The `numeric` rule must have higher
-[`priority`](#user-content-validationrule_property-priority) (default).
+[`numeric`](#numeric) rule for the input. The `numeric` rule must have higher
+[`priority`](#validationrule_property-priority) (default).
 
 #### `new Length(minValue, maxValue)` or `length(minValue, maxValue)` or `lengthMax(maxValue)` <a name="length"></a>
 This rule is to check a value which has `length` attribute such as a string or array. A number
@@ -1567,18 +1534,16 @@ minimum length is 0. If `maxValue` is undefined then no limit for maximum length
 #### `new Max(maxValue)` or `max(maxValue)` <a name="max"></a>
 To limit the input value at maximum of `maxValue`. The data type of `maxValue` can be string,
 number or `Date`. If `maxValue` is number but the input value is string (such as getting from
-`TextInput`) then you must also specify [`numeric`](#user-content-numeric) rule for the input.
-The `numeric` rule must have higher
-[`priority`](#user-content-validationrule_property-priority) (default).  
+`TextInput`) then you must also specify [`numeric`](#numeric) rule for the input. The
+`numeric` rule must have higher [`priority`](#validationrule_property-priority) (default).  
 **Property:**
 - `max` is the maximum value (the same as `maxValue` parameter of constructor)
 
 #### `new Min(minValue)` or `min(minValue)` <a name="min"></a>
 To limit the input value at minimum of `minValue`. The data type of `minValue` can be string,
 number or `Date`. If `minValue` is number but the input value is string (such as getting from
-`TextInput`) then you must also specify [`numeric`](#user-content-numeric) rule for the input.
-The `numeric` rule must have higher
-[`priority`](#user-content-validationrule_property-priority) (default).  
+`TextInput`) then you must also specify [`numeric`](#numeric) rule for the input. The
+`numeric` rule must have higher [`priority`](#validationrule_property-priority) (default).  
 **Property:**
 - `min` is the minimum value (the same as `minValue` parameter of constructor)
 
@@ -1587,8 +1552,8 @@ To assess if the input value is numeric or not.
 
 #### `new Regex(pattern, flags)` or `regex(pattern, flags)` <a name="regex"></a>
 To examine if `pattern` applies to the input value. `pattern` can be a `RegExp` object or a
-pattern string. If `pattern` is a string, `flags` parameter is the flags to add to
-the pattern (see
+pattern string. If `pattern` is a string, `flags` parameter is the flags to add to the pattern
+(see
 [this doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/RegExp)
 for more information).
 
@@ -1600,20 +1565,20 @@ won't be examined.
 **Method:**
 - `notTrimmed`  
   If the input value is a `string` then it will be trimmed before checked.
-  [`resultValue`](#user-content-validationrule_property-resultValue) will have the trimmed
+  [`resultValue`](#validationrule_property-resultValue) will have the trimmed
   value. If we want `resultValue` to have the original value, use the following statement:
 
       new Required().notTrimmed()
 
 #### `Required.If(predicate)` or `required.if(predicate)` <a name="required.if"></a>
-It's the same as [`required`](#user-content-required) rule but under a condition. The
-`predicate` parameter is a function. If it returns `true` then the input is required.
-Otherwise, it's optional. The parameter for `predicate` function is the input value.
+It's the same as [`required`](#required) rule but under a condition. The `predicate` parameter
+is a function. If it returns `true` then the input is required. Otherwise, it's optional. The
+parameter for `predicate` function is the input value.
 
 #### `Required.If(() => false)` or `alwaysValid` <a name="alwaysvalid"></a>
 Use this rule if you want to only use
-[`setErrorMessage`](#user-content-withvalidation_method-seterrormessage) method without
-applying any other rules.
+[`setErrorMessage`](#withvalidation_method-seterrormessage) method without applying any other
+rules.
 
 #### `new CustomRule(predicate, errorMessage)` or `rule(predicate, errorMessage)` <a name="customrule"></a>
 If you need more complicated logic to assess whether the input value is valid or invalid, this
@@ -1623,8 +1588,8 @@ parameter of this function is the input value. The `predicate` function may retu
 considered as invalid. The returned string is the error message (by this way, you may create
 different error message for different condition). The `errorMessage` parameter is used as the
 error message if `predicate` function doesn't return a string (returns `false`). If you set
-[`messageFunc`](#user-content-validationrule_property-messagefunc) then the error message will
-be taken from `messageFunc`.  
+[`messageFunc`](#validationrule_property-messagefunc) then the error message will be taken
+from `messageFunc`.  
 **Example:** <a name="rule_example"></a>  
 The example below is the validator to check whether the number is between 5 to 9. If not then
 the value is invalid. If the value is not a number then it return the error message "Not valid
@@ -1650,13 +1615,13 @@ rule(
 ```
 
 #### `new CustomRuleAsync(predicate, errorMessage)` or `ruleAsync(predicate, errorMessage)` <a name="ruleasync"></a>
-It is almost the same as [`rule`](#user-content-customrule) rule. The difference is it runs in
-asynchronous mode. The `predicate` function for this rule doesn't return anything. As a
-replacement, to set the validation status (valid/invalid or the error message), it has a
-second parameter which is a function. The validation status is set using this function.  
+It is almost the same as [`rule`](#customrule) rule. The difference is it runs in asynchronous
+mode. The `predicate` function for this rule doesn't return anything. As a replacement, to set
+the validation status (valid/invalid or the error message), it has a second parameter which is
+a function. The validation status is set using this function.  
 **Example:** <a name="ruleasync_example"></a>   
-As an example, we change [the example for `rule`](#user-content-rule_example) to be an
-appropriate one for `ruleAsync`.
+As an example, we change [the example for `rule`](#rule_example) to be an appropriate one for
+`ruleAsync`.
 ```javascript
 ruleAsync(
     (value, resolve) => {
@@ -1682,8 +1647,7 @@ ruleAsync(
 > You can import these rules from `'rc-input-validator/rules/time'`
 
 This rule is to check the input value whether it's a valid time value. The input value is a
-`string`. The [`resultValue`](#user-content-validationrule_property-resultValue) is a `Date`
-object.  
+`string`. The [`resultValue`](#validationrule_property-resultValue) is a `Date` object.  
 **Parameters:** <a name="time_parameters"></a>
 - `pattern` is the valid pattern for the input string. The pattern is explained
   [here](https://atmulyana.github.io/JsSimpleDateFormat/JsSimpleDateFormat-Manual.html#Duration_Patterns).
@@ -1692,22 +1656,20 @@ object.
 
 **Property:**
 - `valueAsDate` is to get the `Date` object which reflects the current
-  [`value`](#user-content-validationrule_property-value). It returns `null` if `value` is
-  invalid. This property doesn't execute
-  [`validate`](#user-content-validationrule_method-validate) method. Therefore, accessing this
-  property won't change [`resultValue`](#user-content-validationrule_property-resultValue).
+  [`value`](#validationrule_property-value). It returns `null` if `value` is invalid. This
+  property doesn't execute [`validate`](#validationrule_method-validate) method. Therefore,
+  accessing this property won't change [`resultValue`](#validationrule_property-resultValue).
 
 **Method:**
 - `parse(strTime)` is to parse a string value to be a `Date` object using the defined
-  [pattern](#user-content-time_parameters) for this rule. This method is useful to determine
-  the constraint for the next rule such as [`max`](#user-content-max) or
-  [`min`](#user-content-min).
+  [pattern](#time_parameters) for this rule. This method is useful to determine the constraint
+  for the next rule such as [`max`](#max) or [`min`](#min).
 
 > If you use `<input type="time" />` for the time input in web app, need to know that this
 > input will have an empty string value if the input value is invalid (not the same as the
-> displayed value). Therefore, it will be invalidated by [`required`](#user-content-required)
-> rule or if not required, the input value will be valid (because of optional). To avoid this
-> problem, follow the example below:
+> displayed value). Therefore, it will be invalidated by [`required`](#required) rule or if
+> not required, the input value will be valid (because of optional). To avoid this problem,
+> follow the example below:
 > ```
 > const rules = [new Required().setErrorMessage('Invalid time'), time(), ...];
 > function TimeForm() {
@@ -1720,8 +1682,8 @@ object.
 >```
 > `Required` rule seems enough if you want only to check the time value is valid or not.
 > `time` rule is still needed if you want to check the value using more rules, such as
-> [`min`](#user-content-min) or [`max`](#user-content-max) because `time` rule will have
-> [`resultValue`](#user-content-validationrule_property-resultValue) as a `Date` object.
+> [`min`](#min) or [`max`](#max) because `time` rule will have
+> [`resultValue`](#validationrule_property-resultValue) as a `Date` object.
 
 ### *Built-in* Rules from "web" Module <a name="web_builtin_rules"></a>
 
@@ -1765,7 +1727,7 @@ rule is suitable for the file input whose `multiple` attribute
 (`<Input type="file" multiple />`) even if it can also be applied to a single file input.    
 **Parameters:** <a name="filetotalmax_parameters"></a>
 - `max` is the allowed maximum total size of all uploaded files.
-- `unit` is the same as `unit` for [`fileMax`](#user-content-filemax_parameters).
+- `unit` is the same as `unit` for [`fileMax`](#filemax_parameters).
 
 #### `fileType(type)` <a name="filetype"></a>
 This rule is to check whether the file has the valid MIME type or not.   
@@ -1813,9 +1775,9 @@ fileCheck(
 
 ## Messages <a name="messages"></a>
 
-Each *built-in* [rule object](#user-content-rule) has default error message. You must inspect
-them in the case that you want to translate them to the other languages. The messages can be
-found in `messages.ts`. The messages are listed in the following code:
+Each *built-in* [rule object](#rule) has default error message. You must inspect them in the
+case that you want to translate them to the other languages. The messages can be found in
+`messages.ts`. The messages are listed in the following code:
 ```javascript
 {
     asyncFail: 'cannot validate',
@@ -1865,16 +1827,15 @@ The lines which have bold font are the inserted code.
 
 If you read the message for `max` or `min` rule, you find the special words `${max}` and
 `${min}`. They are the variable placeholder that will be replaced by the real value. The error
-message will be processed by [`str`](#user-content-function-str) function. The second
-parameter for the function is the examined rule object. Therefore, the variable name in the
-template string is the property name of the rule object. For example, in the example before,
-you want to display the input name in the message. You must change the second bold line to be
+message will be processed by [`str`](#function-str) function. The second parameter for the
+function is the examined rule object. Therefore, the variable name in the template string is
+the property name of the rule object. For example, in the example before, you want to display
+the input name in the message. You must change the second bold line to be
 
     messages.required = '${name} must be filled';
 
 To make it works, you must also set the input name in `withValidation`
-[name](#user-content-withvalidation-name) option or `name` prop of the
-[web input](#user-content-web_input).
+[name](#withvalidation-name) option or `name` prop of the [web input](#web_input).
 
 
 ## Example App <a name="example_app"></a>
