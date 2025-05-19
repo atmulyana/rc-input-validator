@@ -620,7 +620,7 @@ for web input):
   prop is named other than `style`. Beside that, this function may be a corrective action to
   fix the style because of how this package prepares the style (please read this
   [`section`](#style_handling-native) for more information).  
-  **NOTE:** It's not the opposite of [`getStyle`](#withvalidation-setstyle) which expects the
+  **NOTE:** It's not the opposite of [`getStyle`](#withvalidation-getstyle) which expects the
   composite style of the input element and its [`Container`](#withvalidation-container).
   Whereas `setStyle`, on other hand, sets the style to the input directly.
 
@@ -702,7 +702,7 @@ slight number of options. This conponent has the following props:
   and may be changed later without changing `value` prop. Still, you may define a state for
   `value` prop and its appropriate `onChange` handler.  
   `options` is a required props (must be set).
-- Other common HTML element props and validation input [props]((#web_input)).
+- Other common HTML element props and validation input [props](#web_input).
 
 Available `CheckBoxes` method:
 - `focus` <a name="checkboxes-focus"></a> is to give focus on the first checkbox.
