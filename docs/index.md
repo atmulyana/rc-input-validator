@@ -22,6 +22,11 @@ It can also validate the uploaded files:
 ![file upload](./images/file-upload.jpg)
 
 
+## How To Install
+
+    npm i rc-input-validator --legacy-peer-deps
+
+
 ## The Comparison between `rc-input-validator` and The Other System
 
 Here, we explain the comparison with the other package or even the *built-in* validation stuff
