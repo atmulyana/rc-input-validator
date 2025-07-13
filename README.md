@@ -1,5 +1,7 @@
 # **rc-input-validator**
 
+> ## This project has been moved to [react-input-validator](https://github.com/atmulyana/react-input-validator)
+
 It's to validate the input component value in React app (web and native). The value is validated based on the
 rule(s) defined for the input. If the input is invalid, the error message is shown near the input. Moreover,
 you can change the inputs' appearance when they are invalid or also valid after the invocation of validation
